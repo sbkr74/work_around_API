@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Responsive Homepage</title>
+  <style>
+    /* General Styles */
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    h1, h2, p {
+      margin: 0;
+    }
+
+    /* Header Styles */
+    header {
+      background-color: #4CAF50;
+      color: white;
+      padding: 20px;
+      text-align: center;
+    }
+
+    header h1 {
+      font-size: 2.5em;
+    }
+
+    header p {
+      font-size: 1.2em;
+    }
+
+    /* Navigation Styles */
+    nav {
+      display: flex;
+      justify-content: center;
+      background-color: #333;
+    }
+
+    nav a {
+      color: white;
+      text-decoration: none;
+      padding: 15px 20px;
+      display: block;
+    }
+
+    nav a:hover {
+      background-color: #575757;
+    }
+
+    /* Main Content Styles */
+    .main {
+      padding: 20px;
+      text-align: center;
+    }
+
+    .main h2 {
+      font-size: 2em;
+      margin-bottom: 20px;
+    }
+
+    .main .cards {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 20px;
+    }
+
+    .main .card {
+      background-color: #f9f9f9;
+      border: 1px solid #ddd;
+      border-radius: 8px;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+      overflow: hidden;
+      text-align: left;
+      transition: transform 0.2s;
+    }
+
+    .main .card:hover {
+      transform: translateY(-5px);
+    }
+
+    .main .card img {
+      width: 100%;
+      height: auto;
+    }
+
+    .main .card .content {
+      padding: 15px;
+    }
+
+    .main .card .content h3 {
+      font-size: 1.5em;
+      margin-bottom: 10px;
+    }
+
+    .main .card .content p {
+      font-size: 1em;
+      color: #555;
+    }
+
+    /* Footer Styles */
+    footer {
+      background-color: #333;
+      color: white;
+      text-align: center;
+      padding: 10px 20px;
+      margin-top: 20px;
+    }
+
+    footer p {
+      font-size: 0.9em;
+    }
+
+    /* Responsive Typography */
+    @media (max-width: 768px) {
+      header h1 {
+        font-size: 2em;
+      }
+
+      header p {
+        font-size: 1em;
+      }
+
+      nav a {
+        font-size: 0.9em;
+      }
+
+      .main h2 {
+        font-size: 1.8em;
+      }
+    }
+  </style>
+</head>
+<body>
+  <!-- Header -->
+  <header>
+    <h1>Welcome to Our Website</h1>
+    <p>Your one-stop destination for amazing content and services.</p>
+  </header>
+
+  <!-- Navigation Bar -->
+  <nav>
+    <a href="#home">Home</a>
+    <a href="#about">About</a>
+    <a href="#services">Services</a>
+    <a href="#contact">Contact</a>
+  </nav>
+
+  <!-- Main Content -->
+  <main class="main">
+    <h2>Our Features</h2>
+    <div class="cards">
+      <!-- Card 1 -->
+      <div class="card">
+        <img src="https://img.freepik.com/premium-photo/abstract-sports-poster-soccer-player-hitting-ball-ai-generated-image_532963-7275.jpg?w=2000" alt="Feature 1" >
+        <div class="content">
+          <h3>Feature 1</h3>
+          <p>Discover the benefits of our platform and how it can transform your experience.</p>
+        </div>
+      </div>
+      <!-- Card 2 -->
+      <div class="card">
+        <img src="https://img.freepik.com/premium-photo/abstract-sports-poster-soccer-player-hitting-ball-ai-generated-image_532963-7274.jpg?w=2000" alt="Feature 2" >
+        <div class="content">
+          <h3>Feature 2</h3>
+          <p>Innovative tools and resources designed to help you achieve your goals.</p>
+        </div>
+      </div>
+      <!-- Card 3 -->
+      <div class="card">
+        <img src="https://thumbs.dreamstime.com/b/abstract-sports-poster-soccer-player-hitting-ball-ai-generated-image-274594655.jpg" alt="Feature 3" >
+        <div class="content">
+          <h3>Feature 3</h3>
+          <p>Explore a wide range of services tailored to meet your needs.</p>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <!-- Footer -->
+  <footer>
+    <p>&copy; 2025 BIRULY corp. All rights reserved.</p>
+  </footer>
+</body>
+</html>
