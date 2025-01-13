@@ -36,6 +36,31 @@ def home_page():
         tasks = Task.query.order_by(Task.created).all()
         return render_template("index.html",tasks=tasks)
 
+# delete task
+@app.route("/delete/<int:id>")
+def delete(id:int):
+    deletetask = Task.query.get_or_404(id)
+    try:
+        db.session.delete(deletetask)
+        db.session.commit()
+        return redirect("/")
+    except Exception as e:
+        print(f"Error:{e}")
+        return f"ERROR:{e}"
+
+# edit task
+@app.route("/update/<int:id>", methods = ["GET","POST"])
+def edit(id:int):
+    editTask = Task.query.get_or_404(id)
+    if request.method == "POST":
+        editTask.content = request.form['content']
+        try:
+            db.session.commit()
+            return redirect("/")
+        except Exception as e:
+            return f"ERROR:{e}"
+    else:
+        return render_template("edit.html",task=editTask)
 
 if __name__ == "__main__":
     with app.app_context():
