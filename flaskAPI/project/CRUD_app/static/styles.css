@@ -1,3 +1,21 @@
 body {
-  background-color: wheat;
+  background-image: url("https://wallpapercave.com/wp/wp2561062.jpg");
+  background-size: cover;
+  font-family: Verdana, Geneva, Tahoma, sans-serif;
+  margin: 0;
+  padding: 0;
+}
+
+div {
+  background-color: rgba(0, 206, 209, 0.28);
+  -webkit-backdrop-filter: blur(1.5px);
+          backdrop-filter: blur(1.5px);
+}
+
+.content {
+  margin: 0;
+  padding: 20px;
+}
+.content h1 {
+  font-family: "Times New Roman", Times, serif;
 }/*# sourceMappingURL=styles.css.map */
