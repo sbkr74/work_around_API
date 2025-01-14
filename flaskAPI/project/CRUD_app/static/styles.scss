@@ -1,8 +1,9 @@
-$primary_color: royalblue;
+$primary_color:#0000FF;
 $title_color: #333; 
 $img_link: "https://wallpapercave.com/wp/wp2561062.jpg";
 $div_bg: rgba(0, 206, 209, 0.28);
-$tbl_col: lightcyan;
+$tbl_col: rgba(133, 204, 133, 0.4);
+$tbl_hd: rgba(255,255,153,0.9);
 
 body{
     background-image: url($img_link); 
@@ -13,18 +14,41 @@ body{
 }
 
 div{
-    background-color: $div_bg
+    background-color: $div_bg;
     backdrop-filter: blur(1.5px);
 }
 
 .content{
-    margin: 0;
+    max-width: 800px;
+    margin: 50px auto;
     padding: 20px;
+    border-radius: 10px;
+    -webkit-box-shadow: 0 0 10px rgba(0,0,0,0.1);
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+    text-align: center;
     h1{
+        color: $primary_color;
         font-family: 'Times New Roman', Times, serif;
     }
 
+    h3{
+        color:#666;
+    }
+
     table{
+        width: 100%;
+        margin-top: 20px;
+        border-collapse: collapse;
         background-color: $tbl_col;
+
+        th,td {
+            padding: 10px;
+            border: 2px solid #ccc;
+        }
+
+        th{
+            background-color:$tbl_hd;
+            color: #333;
+        }
     }
 }

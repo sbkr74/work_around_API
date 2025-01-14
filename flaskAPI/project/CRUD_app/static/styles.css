@@ -13,9 +13,31 @@ div {
 }
 
 .content {
-  margin: 0;
+  max-width: 800px;
+  margin: 50px auto;
   padding: 20px;
+  border-radius: 10px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  text-align: center;
 }
 .content h1 {
+  color: #0000FF;
   font-family: "Times New Roman", Times, serif;
+}
+.content h3 {
+  color: #666;
+}
+.content table {
+  width: 100%;
+  margin-top: 20px;
+  border-collapse: collapse;
+  background-color: rgba(133, 204, 133, 0.4);
+}
+.content table th, .content table td {
+  padding: 10px;
+  border: 2px solid #ccc;
+}
+.content table th {
+  background-color: rgba(255, 255, 153, 0.9);
+  color: #333;
 }/*# sourceMappingURL=styles.css.map */
