@@ -44,9 +44,9 @@ def home_page():
 # delete task
 @app.route("/delete/<int:id>")
 def delete(id:int):
-    deletetask = Task.query.get_or_404(id)
+    delete_task = Task.query.get_or_404(id)
     try:
-        db.session.delete(deletetask)
+        db.session.delete(delete_task)
         db.session.commit()
         return redirect("/")
     except Exception as e:
@@ -56,16 +56,16 @@ def delete(id:int):
 # edit task
 @app.route("/update/<int:id>", methods = ["GET","POST"])
 def edit(id:int):
-    editTask = Task.query.get_or_404(id)
+    edit_task = Task.query.get_or_404(id)
     if request.method == "POST":
-        editTask.content = request.form['content']
+        edit_task.content = request.form['content']
         try:
             db.session.commit()
             return redirect("/")
         except Exception as e:
             return f"ERROR:{e}"
     else:
-        return render_template("edit.html",task=editTask)
+        return render_template("edit.html",task=edit_task)
 
 if __name__ == "__main__":
     app.run(debug=True)
