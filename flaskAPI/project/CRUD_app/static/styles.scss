@@ -1,9 +1,13 @@
-$primary_color:#0000FF;
+$primary_color:#000000;
 $title_color: #333; 
 $img_link: "https://wallpapercave.com/wp/wp2561062.jpg";
 $div_bg: rgba(0, 206, 209, 0.28);
 $tbl_col: rgba(133, 204, 133, 0.4);
 $tbl_hd: rgba(255,255,153,0.9);
+$btn_col: blue;
+$btn_bg_col: rgb(39, 0, 146);
+$btn_success: rgb(40, 255, 40);
+$btn_success_hover: green;
 
 body{
     background-image: url($img_link); 
@@ -31,9 +35,6 @@ div{
         font-family: 'Times New Roman', Times, serif;
     }
 
-    h3{
-        color:#666;
-    }
 
     table{
         width: 100%;
@@ -43,7 +44,7 @@ div{
 
         th,td {
             padding: 10px;
-            border: 2px solid #ccc;
+            border: 2px solid purple;
         }
 
         th{
@@ -51,4 +52,43 @@ div{
             color: #333;
         }
     }
+
+    a{
+        display: inline-block;
+        padding: 3px 12px;
+        margin: 3px;
+        border-radius: 15px;
+        background-color: $btn_col;
+        color: #fff;
+        text-decoration: none;
+        transition: background-color 0.3s ease;
+
+        &:hover{
+            background-color: $btn_bg_col;
+        }
+
+        &:active{
+            transform: scale(0.9);
+        }
+    }
+
+    #content{
+        border: 2px solid #000;
+        padding: 3px 20px;
+    }
+
+    #btn_add{
+        background-color: $btn_success;
+        color: #000;
+        padding: 3px 12px;
+        font-weight: bold;
+        border: 2px solid #000;
+        cursor: pointer;
+
+        &:hover{
+            background-color: $btn_success_hover;
+            color: #fff;
+        }
+    }
+
 }
