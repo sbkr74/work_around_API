@@ -6,7 +6,8 @@ from datetime import datetime
 app = Flask(__name__,template_folder="../templates",static_folder="../static")
 Scss(app)
 
-app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:///task.db" 
+app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:///task.db"
+app.config["SQLALCHEMY_TRACK_MODIFICATION"] = False
 db = SQLAlchemy(app)
 
 class Task(db.Model):
@@ -17,6 +18,10 @@ class Task(db.Model):
 
     def __repr__(self):
         return f"Task {self.id}"
+
+# creating databases     
+with app.app_context():
+    db.create_all()
 
 @app.route("/",methods =["GET","POST"])
 def home_page():
@@ -63,7 +68,4 @@ def edit(id:int):
         return render_template("edit.html",task=editTask)
 
 if __name__ == "__main__":
-    with app.app_context():
-        db.create_all()
-
     app.run(debug=True)
