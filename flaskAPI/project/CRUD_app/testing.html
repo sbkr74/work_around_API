@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pencil Icon Button</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        /* Button styling */
+        .icon-button {
+            display: inline-flex;            /* Flexbox for text and icon alignment */
+            align-items: center;             /* Vertically center items */
+            justify-content: center;         /* Center items horizontally */
+            gap: 5px;                        /* Space between text and icon */
+            width: auto;                     /* Adjust width based on content */
+            padding: 8px 12px;               /* Add padding around content */
+            background-color: #00ced1;       /* Button background color */
+            color: white;                    /* Text and icon color */
+            border: none;                    /* Remove border */
+            border-radius: 15px;             /* Rounded button corners */
+            font-size: 16px;                 /* Text size */
+            font-family: Arial, sans-serif;  /* Text font */
+            cursor: pointer;                 /* Pointer cursor */
+            transition: background-color 0.3s, transform 0.2s; /* Smooth hover and click effects */
+            margin-bottom: 15px;             /* Add spacing between buttons */
+        }
+
+        /* Hover and active states */
+        .icon-button:hover {
+            background-color: #008b8b;       /* Darker cyan on hover */
+        }
+
+        .icon-button:active {
+            transform: scale(0.95);          /* Slight shrink on click */
+        }
+
+        /* Optional shadow */
+        .icon-button {
+            box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.2);
+        }
+
+        .separator {
+            width: 1px;                      /* Line width */
+            height: 20px;                    /* Line height */
+            background-color: white;         /* Line color */
+        }
+    </style>
+</head>
+<body>
+    <!-- Pencil Icon Button -->
+    <button class="icon-button">
+        Edit 
+        <span class="separator"></span>
+        <i class="fas fa-pencil-alt"></i> <!-- Font Awesome pencil icon -->
+    </button>
+    <br>
+    <button class="icon-button">
+        Delete 
+        <span class="separator"></span>
+        <i class="fas fa-trash-alt"></i> <!-- Font Awesome trash icon -->
+    </button>
+</body>
+</html>
