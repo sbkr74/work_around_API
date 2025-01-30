@@ -7,17 +7,16 @@ def questions(quest_path):
 
 if __name__ == '__main__':
     quest_path = r"flaskAPI\project\Math_quiz\EXP\files\equations.txt"
-    ans_path = r"flaskAPI\project\Math_quiz\EXP\files\answers.txt"
     quiz = questions(quest_path)
-    answer = questions(ans_path)
     sol = []
-    ans = []
+    user_res = []
+
     for quest in quiz:
         print(quest.strip())
         x = eval(quest.strip())
         sol.append(x)
-    for val in answer:
-        ans.append(val.strip())
-    comparison = [a == float(b) for a, b in zip(sol, ans)]
-    print(comparison)  
-        
+        y = float(input())
+        user_res.append(y)
+
+    count = sum(a == float(b) for a, b in zip(sol, user_res))
+    print(count)      
