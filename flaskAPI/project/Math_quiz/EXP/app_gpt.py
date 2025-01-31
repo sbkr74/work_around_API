@@ -29,7 +29,7 @@ def read_questions():
             options.append(line)
 
         elif line.startswith("Answer:"):
-            answer = line.strip(": ")[1]
+            answer = line.strip(": ")[0]
     
     # Append the last question
     if question:
@@ -52,12 +52,12 @@ def submit():
 
     for q in questions:
         selected_answer = request.form.get(f"q{q['id']}", "")
-        correct_answer = q["answer"][0]  # First letter (A, B, C, or D)
+        correct_answer = q["answer"]  # First letter (A, B, C, or D)
 
         if selected_answer == correct_answer:
             score += 1
 
-    return f"Your score: {score}/{total}"
+    return f"{selected_answer} and {correct_answer}\nYour score: {score}/{total}"
 
 
 if __name__=="__main__":
