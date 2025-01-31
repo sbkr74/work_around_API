@@ -1,0 +1,13 @@
+1. What is HTML?
+A) A markup language
+B) A programming language
+C) A database
+D) An OS
+Answer: A
+
+2. What does CSS stand for?
+A) Creative Style Sheets
+B) Cascading Style Sheets
+C) Computer Style System
+D) Colorful Style Sheets
+Answer: B
