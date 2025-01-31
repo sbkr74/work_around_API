@@ -1,16 +1,9 @@
-1. What is HTML?
-A) A markup language
-B) A programming language
-C) A database
-D) An OS
-Answer: A
-
-1. What is the value of (25 + 35) \u00f7 5?
+1. What is the value of (25 + 35) ÷ 5?
 A) 5
 B) 10
 C) 15
 D) 12
-Answer: B
+Answer: D
    
 2. A train moving at 72 km/h crosses a pole in 10 seconds. What is its length?
 A) 150 m

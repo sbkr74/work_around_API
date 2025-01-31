@@ -5,7 +5,7 @@ app = Flask(__name__)
 
 def read_questions():
     questions = []
-    with open(r"flaskAPI\project\Math_quiz\EXP\files\questions.txt","r") as f:
+    with open(r"flaskAPI\project\Math_quiz\EXP\files\questions.txt","r",encoding="utf-8") as f:
         data = f.readlines()
     
     question = None
@@ -29,10 +29,11 @@ def read_questions():
             options.append(line)
 
         elif line.startswith("Answer:"):
-            answer = line.strip(": ")[0]
+            # answer = line.strip(": ")[1] 
+            answer = line.split("Answer: ")[-1].strip()
     
     # Append the last question
-    if question:
+    if question and options:
         questions.append({"id": len(questions) + 1, "question": question, "options": options, "answer": answer})
 
     return questions
@@ -52,12 +53,12 @@ def submit():
 
     for q in questions:
         selected_answer = request.form.get(f"q{q['id']}", "")
-        correct_answer = q["answer"]  # First letter (A, B, C, or D)
+        correct_answer = q["answer"][0]  # First letter (A, B, C, or D)
 
         if selected_answer == correct_answer:
             score += 1
 
-    return f"{selected_answer} and {correct_answer}\nYour score: {score}/{total}"
+    return f"Your score: {score}/{total}"
 
 
 if __name__=="__main__":
