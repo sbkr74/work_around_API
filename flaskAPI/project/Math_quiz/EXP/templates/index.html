@@ -1,61 +1,27 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset='utf-8'>
-    <meta http-equiv='X-UA-Compatible' content='IE=edge'>
-    <title>HomePage</title>
-    <meta name='viewport' content='width=device-width, initial-scale=1'>
-    
-    <style>
-        div {
-            background-color: beige;
-            
-        }
-
-        .content{
-            max-width:800px;
-            margin: 50px auto;
-            text-align: center;
-            border-radius: 10px;
-            padding: 20px;
-        }
-
-        input{
-            width: 40px;
-            padding: 3px;
-            margin: 3px ;
-
-        }
-
-        #btn_add {
-            width: fit-content;
-            background-color: rgb(40, 255, 40);
-            color: #000;
-            padding: 3px 12px;
-            font-weight: bold;
-            border: 2px solid #000;
-            cursor: pointer;
-        }
-
-        
-    </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quiz</title>
 </head>
 <body>
-    <div class = "content">
-        <form action="/submit" method="POST">
-            {% for q in questions %}
-            <h3>{{q.id}}.{{q.question}}</h3>
-
+    <h1>Quiz Questions</h1>
+    
+    <form method="post" action="/submit">
+        {% for q in questions %}
+        <div>
+            <h3>{{ q.id }}. {{ q.question }}</h3>
+            
             {% for option in q.options %}
             <p>
                 <input type="radio" name="q{{ q.id }}" value="{{ option[0] }}"> {{ option }}
             </p>
             {% endfor %}
-            {% endfor %}
-            x  = <input type="number" name="x1" id="x1" value="">
-            x  = <input type="number" name="x2" id="x2" value="">
-            <input type="submit" value="submit", id="btn_add">
-        </form>
-    </div>
+        </div>
+        {% endfor %}
+
+        <button type="submit">Submit</button>
+    </form>
 </body>
 </html>
