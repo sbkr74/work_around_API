@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+<!-- <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -20,6 +20,33 @@
             {% endfor %}
         </div>
         {% endfor %}
+
+        <button type="submit">Submit</button>
+    </form>
+</body>
+</html> -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quiz</title>
+</head>
+<body>
+    <h1>Quiz</h1>
+    
+    <h3>Score: {{ score }}</h3>  <!-- Display score -->
+
+    <form method="post" action="/submit">
+        <h2>{{ question.question }}</h2>
+
+        {% for option in question.options %}
+            <p>
+                <input type="radio" name="answer" value="{{ option[0] }}" required> {{ option }}
+            </p>
+        {% endfor %}
+
+        <input type="hidden" name="correct_answer" value="{{ question.answer }}">
 
         <button type="submit">Submit</button>
     </form>
