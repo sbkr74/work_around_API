@@ -52,7 +52,7 @@ def read_questions():
 
 @app.route('/')
 def get_question():
-    questions,ans = read_questions()
+    questions = read_questions()
     
     if 'score' not in session:
         session['score'] = 0  # Initialize score
