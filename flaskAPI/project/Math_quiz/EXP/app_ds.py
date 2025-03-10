@@ -48,11 +48,11 @@ def read_questions():
             "answer": answer
         })
 
-    return questions
+    return questions,answer
 
 @app.route('/')
 def get_question():
-    questions = read_questions()
+    questions,ans = read_questions()
     
     if 'score' not in session:
         session['score'] = 0  # Initialize score
@@ -61,7 +61,7 @@ def get_question():
     
     # Debug: Print session data
     print("Session asked_questions:", session['asked_questions'])
-    
+    print(ans)
     # Select a random question that hasn't been asked
     available_questions = [q for q in questions if q['id'] not in session['asked_questions']]
     
@@ -78,7 +78,8 @@ def get_question():
     # Debug: Print selected question
     print("Selected question ID:", selected_question['id'])
     
-    return render_template("index.html", question=selected_question, score=session['score'])
+    
+    return render_template("index.html", question=selected_question, score=session['score'],ans=ans)
 
 @app.route('/submit', methods=['POST'])
 def submit():
