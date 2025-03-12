@@ -1,4 +1,3 @@
-
 with open(r"flaskAPI\project\Math_quiz\EXP\files\que_check.txt", "r") as f:
     lines = [line.strip() for line in f.readlines() if line.strip()]
 
@@ -6,6 +5,8 @@ questions_list = []
 current_question = []
 current_options = []
 current_answer = None
+
+options_start = False  # Flag to track when options begin
 
 for line in lines:
     if line[0].isdigit() and "." in line[:3]:  # New question starts
@@ -19,7 +20,11 @@ for line in lines:
         current_question = [line]  
         current_options = []
         current_answer = None
-    elif line.startswith("(A)"):  # Options start
+        options_start = False  
+    elif line.startswith("(A)"):  # Options start here
+        options_start = True
+        current_options.append(line)
+    elif options_start and line.startswith(("(B)", "(C)", "(D)")):  # Capture remaining options
         current_options.append(line)
     elif line.startswith("Answer:"):
         current_answer = line.split("Answer:")[-1].strip()
@@ -39,4 +44,3 @@ for i, q in enumerate(questions_list, 1):
     print(f"Question {i}:\n{q['question']}\n")
     print(f"Options:\n{q['options']}\n")
     print(f"Answer: {q['answer']}\n{'-'*50}\n")
-
