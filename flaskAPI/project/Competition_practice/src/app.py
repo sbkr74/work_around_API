@@ -9,41 +9,42 @@ app.secret_key = str(uuid.uuid4())
 
 def read_questions():
     questions = []
-    with open(r"flaskAPI\project\Competition_practice\files\questions.txt", "r", encoding="utf-8") as f:
-        data = f.readlines()
+    with open(r"flaskAPI\project\Math_quiz\EXP\files\que_check.txt", "r", encoding="utf-8") as f:
+        data = [line.strip() for line in f.readlines() if line.strip()]
 
-    question = None
+    question = []
     options = []
     answer = None
 
+    options_start = False
+
     for line in data:
-        line = line.strip()
-
-        if not line:
-            continue
-
-        if line[0].isdigit():  # If the line starts with a number, it's a new question
+        if line[0].isdigit() and "." in line[:3]:  # If the line starts with a number, it's a new question
             if question and options and answer:
                 questions.append({
                     "id": len(questions) + 1,
-                    "question": question,
+                    "question": "\n".join(question),
                     "options": options,
                     "answer": answer
                 })
-            question = line.split(". ", 1)[1]
+            question = [line]
             options = []
             answer = None
-
-        elif line.startswith(("A)", "B)", "C)", "D)")):
+            options_start = False
+        elif line.startswith("(A)"):
+            options_start = True
             options.append(line)
-
+        elif options_start and line.startswith(("(B)", "(C)", "(D)")):
+            options.append(line)
         elif line.startswith("Answer:"):
             answer = line.split("Answer: ")[-1].strip()
+        else:
+            question.append(line)
 
     if question and options and answer:
         questions.append({
             "id": len(questions) + 1,
-            "question": question,
+            "question": "\n".join(question),
             "options": options,
             "answer": answer
         })
@@ -53,7 +54,6 @@ def read_questions():
 @app.route('/')
 def get_question():
     questions = read_questions()
-    
     if 'score' not in session:
         session['score'] = 0  # Initialize score
     if 'asked_questions' not in session:
