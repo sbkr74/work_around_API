@@ -48,7 +48,7 @@ def read_questions():
             "answer": answer
         })
 
-    return questions,answer
+    return questions
 
 @app.route('/')
 def get_question():
@@ -58,6 +58,7 @@ def get_question():
         session['score'] = 0  # Initialize score
     if 'asked_questions' not in session:
         session['asked_questions'] = []  # Track asked questions
+
     
     # Select a random question that hasn't been asked
     available_questions = [q for q in questions if q['id'] not in session['asked_questions']]
