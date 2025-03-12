@@ -4,7 +4,7 @@ import uuid
 from flask import Flask, render_template, request, session
 import random
 
-app = Flask(__name__)
+app = Flask(__name__,template_folder="../templates")
 app.secret_key = str(uuid.uuid4())
 
 def read_questions():
@@ -48,7 +48,7 @@ def read_questions():
             "answer": answer
         })
 
-    return questions,answer
+    return questions
 
 @app.route('/')
 def get_question():
