@@ -1,8 +1,9 @@
+import re
 def read_questions():
-    questions = []
     with open(r"flaskAPI\project\Math_quiz\EXP\files\que_check.txt", "r", encoding="utf-8") as f:
         data = [line.strip() for line in f.readlines() if line.strip()]
-
+    
+    questions = []
     question = []
     options = []
     answer = None
@@ -10,11 +11,14 @@ def read_questions():
     options_start = False
 
     for line in data:
-        if line[0].isdigit() and "." in line[:3]:  # If the line starts with a number, it's a new question
+        if re.match(r"^\d+\.", line):               # Detect question number (e.g., "1.")
             if question and options and answer:
+                full_question = "\n".join(question)
+                # Remove question number using regex
+                clean_question = re.sub(r"^\d+\.\s*", "", full_question)
                 questions.append({
                     "id": len(questions) + 1,
-                    "question": "\n".join(question),
+                    "question": clean_question,
                     "options": options,
                     "answer": answer
                 })
@@ -33,9 +37,11 @@ def read_questions():
             question.append(line)
 
     if question and options and answer:
+        full_question = "\n".join(question)
+        clean_question = re.sub(r"^\d+\.\s*","",full_question)
         questions.append({
             "id": len(questions) + 1,
-            "question": "\n".join(question),
+            "question": clean_question,
             "options": options,
             "answer": answer
         })
