@@ -86,14 +86,15 @@
             <h3>Score: {{ score }}</h3>
 
             <div class="question">
-                {{ question.question }}
+                <p style="white-space: pre-line;">{{ question.question }}</p>
+
             </div>
 
             <form method="post" action="/submit">
                 <div class="options">
                     {% for option in question.options %}
                         <label class="option">
-                            <input type="radio" name="answer" value="{{ option[0] }}" required> {{ option }}
+                            <input type="radio" name="answer" value="{{ option[1] }}" required> {{ option }}
                         </label>
                     {% endfor %}
                 </div>
