@@ -1,7 +1,7 @@
 import uuid
 import re
 
-from flask import Flask, render_template, request, session
+from flask import Flask, render_template, request, session, redirect, url_for
 import random
 
 app = Flask(__name__,template_folder="../templates")
@@ -60,9 +60,14 @@ def read_questions():
 
     return questions
 
+questions = read_questions()
+
+def reset_quiz():
+    session['score'] = 0
+    session['asked_questions'] = []
+
 @app.route('/')
 def get_question():
-    questions = read_questions()
     if 'score' not in session:
         session['score'] = 0  # Initialize score
     if 'asked_questions' not in session:
@@ -73,7 +78,7 @@ def get_question():
     
     
     if not available_questions:
-        return f"Quiz completed! Your final score is {session['score']}/{len(questions)}"
+        return redirect(url_for('final_score'))
 
     selected_question = random.choice(available_questions)
     session['asked_questions'].append(selected_question['id'])
@@ -89,7 +94,17 @@ def submit():
     if selected_answer == correct_answer:
         session['score'] += 1  # Increase score if the answer is correct
 
-    return get_question()  # Redirect to the next question
+    return redirect(url_for('get_question'))  # Redirect to the next question
+
+@app.route('/final_score')
+def final_score():
+
+    score_message = f"Quiz completed! Your final score is {session['score']}/{len(questions)}"
+    
+    # Reset the quiz when the final score is viewed
+    reset_quiz()
+
+    return render_template("final_score.html", score_message=score_message)
 
 if __name__ == "__main__":
     app.run(debug=True)
