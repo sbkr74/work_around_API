@@ -90,7 +90,7 @@
 
             </div>
 
-            <form method="post" action="/submit">
+            <form method="POST" action="{{ url_for('submit') }}">
                 <div class="options">
                     {% for option in question.options %}
                         <label class="option">
@@ -103,10 +103,7 @@
 
                 <button type="submit">Submit</button>
             </form>
-        {% else %}
-            <div class="completed">
-                Quiz completed! Your final score is {{ score }}/{{ total_questions }}
-            </div>
+        
         {% endif %}
     </div>
 </body>
