@@ -77,7 +77,6 @@ def get_question():
     available_questions = [q for q in questions if q['id'] not in session['asked_questions']]
     i = len(available_questions)
     k = 31 - i
-    print(k)
     if not available_questions:
         return redirect(url_for('final_score'))
 
