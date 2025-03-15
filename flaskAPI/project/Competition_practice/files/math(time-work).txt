@@ -1,109 +1,111 @@
 8. A Works twice as fast as B. If B can complete a work in 12 days independently, the number of days in which A and B can together finish the work is
-(a) 4 days 
-(b) 6 days 
-(c) 8 days 
-(d) 18 days
-
+(A) 4 days 
+(B) 6 days 
+(C) 8 days 
+(D) 18 days
+Answer: A
 
 9. 'A' can complete a work in 20 days while B is 25% more efficient than 'A'. B worked for 6 days and left, remaining work is completed by C in 15 days. Find in how many days 'C' can complete the whole work alone?
-(a) 27 days
-(b) 21 days
-(c) 18 days
-(d) 24 days
-
+(A) 27 days
+(B) 21 days
+(C) 18 days
+(D) 24 days
+Answer: D
 
 10. A is twice as good a workman as B. If they work together, they can complete a job in 18 days. If A alone does the job, in how many days he will complete the job?
-(a) 27 days 
-(b) 36 days 
-(c) 40 days 
-(d) 54 days
-
+(A) 27 days 
+(B) 36 days 
+(C) 40 days 
+(D) 54 days
+Answer: A
 
 11. David and Michael together can finish a job in 4 days 19 hrs 12 min. If David works at two-thirds Michael's speed, how long does it take Michael alone to finish the same job?
-(a) 8 days
-(b) 12 days
-(c) 15 days
-(d) None of these
-
+(A) 8 days
+(B) 12 days
+(C) 15 days
+(D) None of these
+Answer: A
 
 12. A is thrice as good a workman as B and so takes 60 days less than B for doing a job. The time in which they can do the job together is
-(a) 22.5 days
-(c) 45 days
-(b) 30 days
-(d) 60 days
-
-
+(A) 22.5 days
+(C) 45 days
+(B) 30 days
+(D) 60 days
+Answer: A
 
 13. A is 30% more efficient than B. How much time will they, working together, take to complete a job which A alone could have done in 23 days ?
-(a) 11 days
-(b) 13 days
-(c) More than 20 days
-(d) None of these
-
+(A) 11 days
+(B) 13 days
+(C) More than 20 days
+(D) None of these
+Answer: B
 
 14. A can do a piece of work in 10 days working 8 hours per day. If B is two-thirds as efficient as A, then in how many days can B alone do the same piece of work, working 5 hours per day?
-(a) 15
-(b) 18
-(c) 20
-(a) 24
-
-
+(A) 15
+(B) 18
+(C) 20
+(D) 24
+Answer: D
 
 15. A can complete a piece of work in 18 days, B in 20 days and C in 30 days. B and C together start the work and are forced to leave after 2 days. The time taken by A alone to complete the remaining work is
-(a) 10 days 
-(b) 12 days 
-(c) 15 days 
-(d) 16 days
-
+(A) 10 days 
+(B) 12 days 
+(C) 15 days 
+(D) 16 days
+Answer: C
 
 16. Working together, Asha and Sudha can complete an assigned task in 20 days. However, if Asha worked alone and completed half the work then Sudha takes over and completed in 45 days. How long will Asha take to complete the task if she worked Will alone? Assume that Sudha is more efficient than Asha.
-(a) 25 days 
-(b) 30 days 
-(c) 60 days 
-(d) 65 days
+(A) 25 days 
+(B) 30 days 
+(C) 60 days 
+(D) 65 days
+Answer: C
 
 17. Raman can do a work in 5 days, Jatin can do the same work in 7 days and Sachin can do the same work in 9 days. If they do the same work together and they are paid Rs 2860 then what is the share (in Rs) of Raman?
-(a) 1260
-(b) 700
-(c) 900
-(d) 870
-
+(A) 1260
+(B) 700
+(C) 900
+(D) 870
+Answer: A
 
 18. If 3 men or 9 boys can finish a piece of work in 21 days, in how many days can 5 men and 6 boys together do the same piece of work ?
-(a) 8 days
-(b) 12 days
-(c) 14 days
-(d) None of these
+(A) 8 days
+(B) 12 days
+(C) 14 days
+(D) None of these
+Answer: D
 
 19. If 2 men or 6 women or 4 boys can finish a work in 99 days, how many days will one man, one woman and one boy together take to finish the same work?
-(a) 44 days 
-(b) 64 days 
-(c) 104 days
-(d) None of these
+(A) 44 days 
+(B) 64 days 
+(C) 104 days
+(D) None of these
+Answer: D
 
 20. 8 men can complete a piece of work in 20 days women can complete the same work in 32 days. In how many days will 5 men and 8 women together complete the same work?
-(a) 10 days 
-(b) 12 days 
-(c) 14 days 
-(d) 16
-
+(A) 10 days 
+(B) 12 days 
+(C) 14 days 
+(D) 16
+Answer: D
 
 21. A can complete 1/3 of a work in 5 days and B 2/5 of the work in 10 days. In how many days both A and B together can complete the work ?
 (A) 7.5
 (B) 8.8
 (C) 9.375
 (D) 10
-Answer: D
+Answer: C
 
 22. A job can be done by 3 skilled worksmen in 20 days or by 5 boys in 30 days. How many days will they take if work together?
-(a) 8 days 
-(b) 10 days 
-(c) 11 days
-(d) 12 days
-
+(A) 8 days 
+(B) 10 days 
+(C) 11 days
+(D) 12 days
+Answer: D
 
 23. A can complete a certain work in 4 minutes, B in 5 minutes,C in 6 minutes, D in 10 minutes and E in 12 minutes. The average number of units work completed by them per minute will be
-(a) 0.16
-(b) 0.40 
-(c) 0.80
-(d) None of these
+(A) 0.16
+(B) 0.40 
+(C) 0.80
+(D) None of these
+Answer: A
