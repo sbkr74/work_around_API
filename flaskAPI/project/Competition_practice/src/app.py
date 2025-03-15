@@ -75,8 +75,9 @@ def get_question():
     
     # Select a random question that hasn't been asked
     available_questions = [q for q in questions if q['id'] not in session['asked_questions']]
-    
-    
+    i = len(available_questions)
+    k = 31 - i
+    print(k)
     if not available_questions:
         return redirect(url_for('final_score'))
 
@@ -84,7 +85,7 @@ def get_question():
     session['asked_questions'].append(selected_question['id'])
     session.modified = True  # Ensure the session is saved   
     
-    return render_template("index.html", question=selected_question, score=session['score'])
+    return render_template("index.html", question=selected_question, score=session['score'],k=k)
 
 @app.route('/submit', methods=['POST'])
 def submit():
