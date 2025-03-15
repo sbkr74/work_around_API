@@ -1,4 +1,5 @@
 # Improvement Needed in Practice
+- Login page
 - Questions number
 - options shuffling
 - skip options, prev ,next qustion
@@ -7,3 +8,4 @@
 - per question check whether it is right or wrong (final score page)
 - Overall ranking system
 - solutions (image)
+- Different sections (chapter-wise,subject-wise,exam based)
