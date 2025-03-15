@@ -1,0 +1,9 @@
+# Improvement Needed in Practice
+- Questions number
+- options shuffling
+- skip options, prev ,next qustion
+- negative marks (1/3,1/4)
+- Total Timer, question_timer
+- per question check whether it is right or wrong (final score page)
+- Overall ranking system
+- solutions (image)
