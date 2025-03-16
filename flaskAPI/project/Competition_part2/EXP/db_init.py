@@ -53,5 +53,21 @@ def insert_user(username, password):
     
     db.close()
 
+def view_users():
+    """Fetch and display all users from the database."""
+    # db = sqlite3.connect(DATABASE)
+    db = get_db()
+    cursor = db.cursor()
+
+    cursor.execute("SELECT id, username, password FROM users")
+    users = cursor.fetchall()
+
+    db.close()
+
+    print("\nStored Users:")
+    for user in users:
+        print(f"ID: {user[0]}, Username: {user[1]}, Password Hash: {user[2]}")
+
+
 if __name__ == "__main__":
     init_db()  # Run this to create the database
