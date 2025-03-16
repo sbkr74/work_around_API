@@ -2,6 +2,7 @@ from flask import Flask, render_template, request, redirect, url_for, session
 import sqlite3
 import random
 import os
+import re
 
 app = Flask(__name__)
 app.secret_key = os.urandom(24) # Required for session management
@@ -21,43 +22,53 @@ def init_db():
 init_db()  # Initialize database on startup
 
 def read_questions():
-    questions = []
-    file_path = "flaskAPI/project/Competition_part2/files/test_1.txt"
+    file_path = r"flaskAPI\project\Competition_part2\files\test_1.txt"
     with open(file_path, "r", encoding="utf-8") as f:
-        data = f.readlines()
-
-    question = None
+        data = [line.strip() for line in f.readlines() if line.strip()]
+    
+    questions = []
+    question = []
     options = []
     answer = None
 
+    options_start = False
+
     for line in data:
-        line = line.strip()
-
-        if not line:
-            continue
-
-        if line[0].isdigit():  # If the line starts with a number, it's a new question
+        if re.match(r"^\d+\.", line):               # Detect question number (e.g., "1.")
             if question and options and answer:
+                full_question = "\n".join(question)
+                # Remove question number using regex
+                clean_question = re.sub(r"^\d+\.\s*", "", full_question)
                 questions.append({
                     "id": len(questions) + 1,
-                    "question": question,
+                    "question": clean_question,
                     "options": options,
                     "answer": answer
                 })
-            question = line.split(". ", 1)[1]
+            question = [line]
             options = []
             answer = None
-
-        elif line.startswith(("A)", "B)", "C)", "D)")):
+            options_start = False
+        
+        elif line.startswith("(A)"):
+            options_start = True
             options.append(line)
-
+        
+        elif options_start and line.startswith(("(B)", "(C)", "(D)")):
+            options.append(line)
+        
         elif line.startswith("Answer:"):
             answer = line.split("Answer: ")[-1].strip()
+        
+        else:
+            question.append(line)
 
     if question and options and answer:
+        full_question = "\n".join(question)
+        clean_question = re.sub(r"^\d+\.\s*","",full_question)
         questions.append({
             "id": len(questions) + 1,
-            "question": question,
+            "question": clean_question,
             "options": options,
             "answer": answer
         })
@@ -146,7 +157,7 @@ def submit():
     if selected_answer == correct_answer:
         session['score'] += 1
 
-    return get_question()
+    return redirect(url_for('get_question')) 
 
 @app.route('/final_score')
 def final_score():
