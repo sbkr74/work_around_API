@@ -5,7 +5,7 @@ import random
 app = Flask(__name__)
 app.secret_key = 'your_secret_key'  # Required for session management
 
-DATABASE = "flaskAPI/project/Competition_part2/EXP/quiz.db"
+DATABASE = "flaskAPI/project/Competition_part2/files/quiz.db"
 
 # Database initialization
 def init_db():
