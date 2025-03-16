@@ -136,15 +136,24 @@ def get_question():
     if 'user' not in session:
         return redirect(url_for('login'))
 
-    # If all questions have been answered, redirect to final score page
-    if len(session['asked_questions']) == len(questions):
+    if 'score' not in session:
+        session['score'] = 0  # Initialize score
+    if 'asked_questions' not in session:
+        session['asked_questions'] = []  # Track asked questions
+    
+    total_questions = len(questions) + 1  # Get the total number of questions
+    # Select a random question that hasn't been asked
+    available_questions = [q for q in questions if q['id'] not in session['asked_questions']]
+    k = total_questions - len(available_questions)  # Dynamically calculate k
+
+    if not available_questions:
         return redirect(url_for('final_score'))
 
-    # Get the next question randomly but without repetition
-    selected_question = session['remaining_questions'].pop(0)
+    selected_question = random.choice(available_questions)
     session['asked_questions'].append(selected_question['id'])
+    session.modified = True  # Ensure the session is saved   
     
-    return render_template("index.html", question=selected_question)
+    return render_template("index.html", question=selected_question, score=session['score'],k=k)
 
 @app.route('/submit', methods=['POST'])
 def submit():
