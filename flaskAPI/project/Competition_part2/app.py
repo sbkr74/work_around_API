@@ -81,7 +81,7 @@ def reset_quiz():
     """Resets the quiz session when a new user logs in."""
     session['score'] = 0
     session['asked_questions'] = []
-    session['remaining_questions'] = random.sample(questions, len(questions))
+    # session['remaining_questions'] = random.sample(questions, len(questions))
 
 @app.route('/')
 def home():
@@ -174,6 +174,8 @@ def final_score():
         return redirect(url_for('login'))
 
     score_message = f"Quiz completed! Your final score is {session['score']}/{len(questions)}"
+    # Reset the quiz when the final score is viewed
+    reset_quiz()
     return render_template("final_score.html", score_message=score_message)
 
 if __name__ == "__main__":
