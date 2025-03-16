@@ -6,8 +6,8 @@
 <body>
     <h1>Quiz Completed!</h1>
     <p>{{ score_message }}</p>
-    <a href="/">Restart Quiz</a>
+    <a href="{{ url_for('get_question') }}">Restart Quiz</a>
     <br>
-    <a href="/logout">Logout</a>
+    <a href="login">Logout</a>
 </body>
 </html>
