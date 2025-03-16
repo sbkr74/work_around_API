@@ -68,6 +68,41 @@ def view_users():
     for user in users:
         print(f"ID: {user[0]}, Username: {user[1]}, Password Hash: {user[2]}")
 
+def authenticate_user(uname, pwd):
+    new_pwd = pwd.encode()
+    print(f"Login Successful! Welcome, {uname}")
+    print(f"Password needs to change: {pwd}")
+    print(f"Password needs to change: {new_pwd}")
 
 if __name__ == "__main__":
-    init_db()  # Run this to create the database
+    # Initialize database (run this once)
+    init_db()
+
+    while True:
+        print("\nUser Management Menu:")
+        print("1. Register User")
+        print("2. View Users")
+        print("3. Login")
+        print("4. Exit")
+
+        choice = input("Enter your choice: ")
+
+        if choice == "1":
+            uname = input("Enter a username: ")
+            pwd = input("Enter a password: ")
+            insert_user(uname, pwd)
+
+        elif choice == "2":
+            view_users()
+
+        elif choice == "3":
+            uname = input("Enter your username: ")
+            pwd = input("Enter your password: ")
+            authenticate_user(uname, pwd)
+
+        elif choice == "4":
+            print("Exiting program.")
+            break
+
+        else:
+            print("Invalid choice! Please enter a valid option.")
