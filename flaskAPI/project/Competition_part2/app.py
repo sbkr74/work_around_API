@@ -1,9 +1,10 @@
 from flask import Flask, render_template, request, redirect, url_for, session
 import sqlite3
 import random
+import os
 
 app = Flask(__name__)
-app.secret_key = 'your_secret_key'  # Required for session management
+app.secret_key = os.urandom(24) # Required for session management
 
 DATABASE = "flaskAPI/project/Competition_part2/files/quiz.db"
 
