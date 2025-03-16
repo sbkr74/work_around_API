@@ -1,11 +1,10 @@
 import sqlite3
 
-DATABASE = "quiz.db"  # Database file name
+DATABASE = "flaskAPI/project/Competition_part2/EXP/quiz.db"  # Database file name
 
 def get_db():
     """Connects to the SQLite database and returns the connection."""
     conn = sqlite3.connect(DATABASE)  # Creates "quiz.db" if it does not exist
-    # conn.row_factory = sqlite3.Row  # Enables dictionary-like row access
     return conn
 
 def init_db():
@@ -36,7 +35,6 @@ def init_db():
 
 def insert_user(username, password):
     """Inserts a user with a hashed password into the database."""
-    # db = sqlite3.connect(DATABASE)
     db = get_db()
     cursor = db.cursor()
 
@@ -55,7 +53,6 @@ def insert_user(username, password):
 
 def view_users():
     """Fetch and display all users from the database."""
-    # db = sqlite3.connect(DATABASE)
     db = get_db()
     cursor = db.cursor()
 
@@ -68,11 +65,19 @@ def view_users():
     for user in users:
         print(f"ID: {user[0]}, Username: {user[1]}, Password Hash: {user[2]}")
 
-def authenticate_user(uname, pwd):
-    new_pwd = pwd.encode()
-    print(f"Login Successful! Welcome, {uname}")
-    print(f"Password needs to change: {pwd}")
-    print(f"Password needs to change: {new_pwd}")
+def authenticate_user(username, password):
+    db = get_db()
+    cursor = db.cursor()
+
+    cursor.execute("SELECT * FROM users WHERE username = ? AND password = ?", (username, password))
+    user = cursor.fetchone()  # Fetch the first matching record
+
+    db.close()
+
+    if user:
+        print(f"Login successful! Welcome, {username}.")
+    else:
+        print("Login failed! Invalid username or password.")
 
 if __name__ == "__main__":
     # Initialize database (run this once)
