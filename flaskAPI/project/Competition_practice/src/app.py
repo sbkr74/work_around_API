@@ -73,10 +73,11 @@ def get_question():
     if 'asked_questions' not in session:
         session['asked_questions'] = []  # Track asked questions
     
+    total_questions = len(questions) + 1  # Get the total number of questions
     # Select a random question that hasn't been asked
     available_questions = [q for q in questions if q['id'] not in session['asked_questions']]
-    i = len(available_questions)
-    k = 31 - i
+    k = total_questions - len(available_questions)  # Dynamically calculate k
+
     if not available_questions:
         return redirect(url_for('final_score'))
 
