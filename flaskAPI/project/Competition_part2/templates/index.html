@@ -8,7 +8,7 @@
     <p>Welcome, {{ session['user'] }}</p>
 
     <div>
-        <p>{{ question['question'] }}</p>
+        <p style="white-space: pre-line;">{{ question['question'] }}</p>
         <form action="/submit" method="POST">
             {% for option in question['options'] %}
                 <input type="radio" id="{{ option }}" name="answer" value="{{ option }}" required>
