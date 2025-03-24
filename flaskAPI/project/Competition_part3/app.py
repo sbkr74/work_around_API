@@ -130,11 +130,11 @@ def login():
 
         if user:
             session["username"] = username
+            session["score"] = 0  # Reset score
             session["questions"] = fetch_questions()  # Load questions
             random.shuffle(session["questions"])  # Shuffle for randomness
             session["history"] = []
             session["current_index"] = -1
-            session["score"] = 0  # Reset score
 
             return redirect(url_for("quiz"))
         else:
@@ -159,25 +159,38 @@ def quiz():
 
     if "questions" not in session or not session["questions"]:
         return redirect(url_for("final_score"))
-
+    print("session['current_index']: ",session["current_index"])
     if session["current_index"] == -1:  # Start quiz
         question = session["questions"].pop()
         session["history"].append(question)
         session["current_index"] = len(session["history"]) - 1
+    
     else:
         question = session["history"][session["current_index"]]
-
+    print("len(session['history']) - 1:",len(session["history"]) - 1)
+    print("session['score']:",session['score'])
     return render_template("quiz.html", question=question,score=session['score'])
 
 # Next Question
 @app.route("/next", methods=["POST"])
 def next_question():
+    selected_answer = request.form.get("answer", "")
+    correct_answer = request.form.get("correct_answer", "")
+
+    if selected_answer == correct_answer:
+        session["score"] += 1
+
     if session["current_index"] < len(session["history"]) - 1:
         session["current_index"] += 1
+        print("(if)session['current_index']",session["current_index"])
+        print("len(session['history']) - 1:",len(session["history"]) - 1)
     elif session["questions"]:
         question = session["questions"].pop()
         session["history"].append(question)
         session["current_index"] = len(session["history"]) - 1
+        
+        print("(elif) session['current_index']",session["current_index"])
+        print("len(session['history']) - 1:",len(session["history"]) - 1)
     else:
         return redirect(url_for("final_score"))
 
@@ -191,21 +204,28 @@ def prev_question():
 
     return redirect(url_for("quiz"))
 
+# in prev_question() : revert back item of session['history'] poped
+# from session['question'] and also check for session['current_index']
+
 # Submit Answer
 @app.route("/submit", methods=["POST"])
 def submit():
-    selected_answer = request.form.get("answer", "")
-    correct_answer = request.form.get("correct_answer", "")
+    if session["current_index"] < len(session["history"]) - 1:
+        session["current_index"] += 1
+    elif session["questions"]:
+        question = session["questions"].pop()
+        session["history"].append(question)
+        session["current_index"] = len(session["history"]) - 1
+    else:
+        return redirect(url_for("final_score"))
 
-    if selected_answer == correct_answer:
-        session["score"] += 1  # Increase score if correct
+    return redirect(url_for("quiz"))
 
-    return redirect(url_for("next_question"))
 
 # Final Score
 @app.route("/final_score")
 def final_score():
-    score = session.get("score", 0)
+    score = session.get("score")
     total_questions = len(session.get("history", []))
     session.clear()  # Reset session after quiz ends
     return render_template("final_score.html", score=score, total_questions=total_questions)
