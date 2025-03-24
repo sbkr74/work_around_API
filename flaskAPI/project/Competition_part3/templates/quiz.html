@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quiz</title>
+</head>
+<body>
+    <h1>Quiz</h1>
+    <form action="{{ url_for('next_question') }}" method="POST">
+        <p><strong>Question:</strong> {{ question["question"] }}</p>
+
+        <!-- Radio buttons for options -->
+        <input type="radio" id="option_a" name="answer" value="{{ question['option_a'] }}">
+        <label for="option_a">{{ question['option_a'] }}</label><br>
+
+        <input type="radio" id="option_b" name="answer" value="{{ question['option_b'] }}">
+        <label for="option_b">{{ question['option_b'] }}</label><br>
+
+        <input type="radio" id="option_c" name="answer" value="{{ question['option_c'] }}">
+        <label for="option_c">{{ question['option_c'] }}</label><br>
+
+        <input type="radio" id="option_d" name="answer" value="{{ question['option_d'] }}">
+        <label for="option_d">{{ question['option_d'] }}</label><br>
+
+        <!-- Correct answer (hidden input) -->
+        <input type="hidden" name="correct_answer" value="{{ question['answer'] }}">
+
+        <button type="submit">Submit</button>
+    </form>
+
+    <form action="{{ url_for('prev_question') }}" method="POST">
+        <button type="submit" {% if session["current_index"] == 0 %}disabled{% endif %}>Previous</button>
+    </form>
+
+    <form action="{{ url_for('next_question') }}" method="POST">
+        <button type="submit">Next</button>
+    </form>
+</body>
+</html>
