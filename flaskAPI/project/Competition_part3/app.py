@@ -5,21 +5,28 @@ import os
 
 app = Flask(__name__)
 app.secret_key = os.urandom(24) # Required for session management
-DATABASE = "flaskAPI/project/Competition_part2/files/quiz.db"
 
+DATABASE = r"flaskAPI/project/Competition_part3/files/quiz.db"
 
+# Database connection
 def get_db():
-    """Connects to SQLite database."""
     conn = sqlite3.connect(DATABASE)
-    # conn.row_factory = sqlite3.Row  # Enables dictionary-like access
+    conn.row_factory = sqlite3.Row  # Enables dictionary-like row access
     return conn
 
-
+# Initialize database (Run only once)
 def init_db():
-    """Creates the questions table in SQLite."""
-    # conn = sqlite3.connect(DATABASE)
     conn = get_db()
     cursor = conn.cursor()
+
+    # Create users table
+    cursor.execute("""
+        CREATE TABLE IF NOT EXISTS users (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            username TEXT UNIQUE NOT NULL,
+            password TEXT NOT NULL
+        )
+    """)
 
     # Create questions table
     cursor.execute("""
@@ -42,85 +49,168 @@ def init_db():
         ("What is 15 / 3?", "3", "4", "5", "6", "5"),
         ("What is 9 + 1?", "8", "9", "10", "11", "10"),
     ]
+    
 
-    cursor.executemany("""
-        INSERT INTO questions (question, option_a, option_b, option_c, option_d, answer) 
-        VALUES (?, ?, ?, ?, ?, ?)
-    """, sample_questions)
-
+    # Insert sample questions if the table is empty
+    cursor.execute("SELECT COUNT(*) FROM questions")
+    if cursor.fetchone()[0] == 0:  # ✅ Insert only if table is empty
+        cursor.executemany("""
+            INSERT INTO questions (question, option_a, option_b, option_c, option_d, answer) VALUES 
+            (?, ?, ?, ?, ?, ?)
+        """, [
+            ("What is 2 + 2?", "3", "4", "5", "6", "4"),
+            ("What is 3 * 3?", "6", "7", "9", "10", "9"),
+            ("What is 10 / 2?", "3", "4", "5", "6", "5")
+        ])
+        print("Sample questions inserted!")
+    
     conn.commit()
     conn.close()
     print("Database initialized successfully!")
+init_db()  # Run only once to initialize database
 
-# Run the function once to set up the database
-init_db()
+# # Fetch questions from database
+# def fetch_questions():
+#     db = get_db()
+#     # db.row_factory=sqlite3.Row  # conn.row_factory = sqlite3.Row
+#     cursor = db.cursor()
+#     cursor.execute("SELECT * FROM questions")
+#     questions = cursor.fetchall()
+#     db.close()
+#     return list(questions)
 
-@app.route('/login', methods=['GET', 'POST'])
-def login():
-    if request.method == 'POST':
-        username = request.form['username']
-        password = request.form['password']
-
-        with sqlite3.connect(DATABASE) as conn:
-            cursor = conn.cursor()
-            cursor.execute("SELECT * FROM users WHERE username = ? AND password = ?", (username, password))
-            user = cursor.fetchone()
-
-            if user:
-                session['user'] = username  # Start new session
-                # reset_quiz()  # Reset quiz for the new user
-                return redirect(url_for('quiz'))
-            else:
-                return "Invalid username or password. Try again."
-
-    return render_template('login.html')
-
+# Fetch questions from database
 def fetch_questions():
-    """Fetch all questions from the database."""
     db = get_db()
     cursor = db.cursor()
     cursor.execute("SELECT * FROM questions")
     questions = cursor.fetchall()
     db.close()
-    return list(questions)
+    return [dict(q) for q in questions]  # Convert to list of dictionaries
 
-
-@app.route("/")
+@app.route('/')
 def home():
-    """Redirects to quiz if user is logged in, otherwise to login."""
-    if "user_id" not in session:
-        return redirect(url_for("login"))
-    return redirect(url_for("quiz"))
+    if 'user' not in session:
+        return redirect(url_for('login'))
+    return redirect(url_for('quiz'))
 
+# User Signup
+@app.route("/signup", methods=["GET", "POST"])
+def signup():
+    if request.method == "POST":
+        username = request.form["username"]
+        password = request.form["password"]
 
-@app.route("/quiz")
-def quiz():
-    if "questions" not in session:
-        session["questions"] = fetch_questions()
-        random.shuffle(session["questions"])
-        session["history"] = []
-        session["current_index"] = -1
+        conn = get_db()
+        cursor = conn.cursor()
 
-    # Ensure a question is popped before accessing history
-    if session["current_index"] == -1:
-        question = session["questions"].pop(0)
-        session["history"].append(question)
-        session["current_index"] = 0  # Move to first question
-    else:
-        # Ensure current index is valid
-        if session["current_index"] < 0 or session["current_index"] >= len(session["history"]):
-            session["current_index"] = len(session["history"]) - 1  # Reset to last valid index
-        
-        question = session["history"][session["current_index"]]
+        try:
+            cursor.execute("INSERT INTO users (username, password) VALUES (?, ?)", (username, password))
+            conn.commit()
+            return redirect(url_for("login"))
+        except sqlite3.IntegrityError:
+            return "Username already exists! Try a different one."
+        finally:
+            conn.close()
 
-    return render_template("index.html", question=question)
+    return render_template("signup.html")
 
+# User Login
+@app.route("/login", methods=["GET", "POST"])
+def login():
+    if request.method == "POST":
+        username = request.form["username"]
+        password = request.form["password"]
+
+        conn = get_db()
+        cursor = conn.cursor()
+        cursor.execute("SELECT * FROM users WHERE username = ? AND password = ?", (username, password))
+        user = cursor.fetchone()
+        conn.close()
+
+        if user:
+            session["username"] = username
+            session["questions"] = fetch_questions()  # Load questions
+            random.shuffle(session["questions"])  # Shuffle for randomness
+            session["history"] = []
+            session["current_index"] = -1
+            session["score"] = 0  # Reset score
+
+            return redirect(url_for("quiz"))
+        else:
+            return "Invalid username or password!"
+
+    return render_template("login.html")
+
+# Logout
 @app.route("/logout")
 def logout():
-    """Logs out the user and clears session."""
-    session.clear()
+    session.clear()  # Clears all session data
     return redirect(url_for("login"))
 
+# Quiz logic with Previous and Next buttons
+@app.route("/quiz")
+def quiz():
+    if "username" not in session:
+        return redirect(url_for("login"))  # Redirect if not logged in
+    
+    if 'score' not in session:
+        session['score'] = 0  # Initialize score
 
+    if "questions" not in session or not session["questions"]:
+        return redirect(url_for("final_score"))
+
+    if session["current_index"] == -1:  # Start quiz
+        question = session["questions"].pop()
+        session["history"].append(question)
+        session["current_index"] = len(session["history"]) - 1
+    else:
+        question = session["history"][session["current_index"]]
+
+    return render_template("quiz.html", question=question,score=session['score'])
+
+# Next Question
+@app.route("/next", methods=["POST"])
+def next_question():
+    if session["current_index"] < len(session["history"]) - 1:
+        session["current_index"] += 1
+    elif session["questions"]:
+        question = session["questions"].pop()
+        session["history"].append(question)
+        session["current_index"] = len(session["history"]) - 1
+    else:
+        return redirect(url_for("final_score"))
+
+    return redirect(url_for("quiz"))
+
+# Previous Question
+@app.route("/prev", methods=["POST"])
+def prev_question():
+    if session["current_index"] > 0:
+        session["current_index"] -= 1
+
+    return redirect(url_for("quiz"))
+
+# Submit Answer
+@app.route("/submit", methods=["POST"])
+def submit():
+    selected_answer = request.form.get("answer", "")
+    correct_answer = request.form.get("correct_answer", "")
+
+    if selected_answer == correct_answer:
+        session["score"] += 1  # Increase score if correct
+
+    return redirect(url_for("next_question"))
+
+# Final Score
+@app.route("/final_score")
+def final_score():
+    score = session.get("score", 0)
+    total_questions = len(session.get("history", []))
+    session.clear()  # Reset session after quiz ends
+    return render_template("final_score.html", score=score, total_questions=total_questions)
+
+# Run the app
 if __name__ == "__main__":
+    
     app.run(debug=True)
