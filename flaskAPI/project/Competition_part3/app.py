@@ -60,7 +60,12 @@ def init_db():
         """, [
             ("What is 2 + 2?", "3", "4", "5", "6", "4"),
             ("What is 3 * 3?", "6", "7", "9", "10", "9"),
-            ("What is 10 / 2?", "3", "4", "5", "6", "5")
+            ("What is 10 / 2?", "3", "4", "5", "6", "5"),
+            ("What is 5 + 3?", "6", "7", "8", "9", "8"),
+            ("What is 10 - 4?", "5", "6", "7", "8", "6"),
+            ("What is 2 * 6?", "10", "11", "12", "13", "12"),
+            ("What is 15 / 3?", "3", "4", "5", "6", "5"),
+            ("What is 9 + 1?", "8", "9", "10", "11", "10"),
         ])
         print("Sample questions inserted!")
     
@@ -68,16 +73,6 @@ def init_db():
     conn.close()
     print("Database initialized successfully!")
 init_db()  # Run only once to initialize database
-
-# # Fetch questions from database
-# def fetch_questions():
-#     db = get_db()
-#     # db.row_factory=sqlite3.Row  # conn.row_factory = sqlite3.Row
-#     cursor = db.cursor()
-#     cursor.execute("SELECT * FROM questions")
-#     questions = cursor.fetchall()
-#     db.close()
-#     return list(questions)
 
 # Fetch questions from database
 def fetch_questions():
@@ -159,7 +154,6 @@ def quiz():
 
     if "questions" not in session or not session["questions"]:
         return redirect(url_for("final_score"))
-    print("session['current_index']: ",session["current_index"])
     if session["current_index"] == -1:  # Start quiz
         question = session["questions"].pop()
         session["history"].append(question)
@@ -167,8 +161,6 @@ def quiz():
     
     else:
         question = session["history"][session["current_index"]]
-    print("len(session['history']) - 1:",len(session["history"]) - 1)
-    print("session['score']:",session['score'])
     return render_template("quiz.html", question=question,score=session['score'])
 
 # Next Question
@@ -182,15 +174,10 @@ def next_question():
 
     if session["current_index"] < len(session["history"]) - 1:
         session["current_index"] += 1
-        print("(if)session['current_index']",session["current_index"])
-        print("len(session['history']) - 1:",len(session["history"]) - 1)
     elif session["questions"]:
         question = session["questions"].pop()
         session["history"].append(question)
         session["current_index"] = len(session["history"]) - 1
-        
-        print("(elif) session['current_index']",session["current_index"])
-        print("len(session['history']) - 1:",len(session["history"]) - 1)
     else:
         return redirect(url_for("final_score"))
 
