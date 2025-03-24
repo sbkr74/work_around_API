@@ -7,5 +7,6 @@
 - Total Timer, question_timer
 - per question check whether it is right or wrong (final score page)
 - Overall ranking system
-- solutions (image)
+- solutions (image), links(videos)
 - Different sections (chapter-wise,subject-wise,exam based)
+- per question analysis present. (analysis button will be enabled after submit and for next question next button).
