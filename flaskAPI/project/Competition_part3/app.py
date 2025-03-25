@@ -65,7 +65,7 @@ def init_db():
             ("What is 10 - 4?", "5", "6", "7", "8", "6"),
             ("What is 2 * 6?", "10", "11", "12", "13", "12"),
             ("What is 15 / 3?", "3", "4", "5", "6", "5"),
-            ("What is 9 + 1?", "8", "9", "10", "11", "10"),
+            ("What is 9 + 1?", "8", "9", "10", "11", "10")
         ])
         print("Sample questions inserted!")
     
@@ -154,16 +154,75 @@ def quiz():
 
     if "questions" not in session or not session["questions"]:
         return redirect(url_for("final_score"))
-    if session["current_index"] == -1:  # Start quiz
-        question = session["questions"].pop()
-        session["history"].append(question)
-        session["current_index"] = len(session["history"]) - 1
     
-    else:
-        question = session["history"][session["current_index"]]
-    return render_template("quiz.html", question=question,score=session['score'])
+    # if session["current_index"] == -1:  # Start quiz
+    #     question = session["questions"].pop()
+    #     session["history"].append(question)
+    #     session["current_index"] = len(session["history"]) - 1
+    
+    # else:
+    #     question = session["history"][session["current_index"]]
+
+    # return render_template("quiz.html", question=question,score=session['score'])
+
+     # Fix: Start at index 0 instead of popping a question immediately
+    # Ensure at least one question is in history before accessing index 0
+    if not session["history"] and session["questions"]:
+        session["history"].append(session["questions"][0])  # Add the first question
+
+    # Prevent IndexError
+    if session["current_index"] >= len(session["history"]):
+        return redirect(url_for("final_score"))
+
+    question = session["history"][session["current_index"]]
+    
+    return render_template("quiz.html", question=question, score=session['score'])
 
 # Next Question
+# @app.route("/next", methods=["POST"])
+# def next_question():
+#     selected_answer = request.form.get("answer", "")
+#     correct_answer = request.form.get("correct_answer", "")
+
+#     if selected_answer == correct_answer:
+#         session["score"] += 1
+
+#     if session["current_index"] < len(session["history"]) - 1:
+#         session["current_index"] += 1
+#     elif session["questions"]:
+#         question = session["questions"].pop()
+#         session["history"].append(question)
+#         session["current_index"] = len(session["history"]) - 1
+#     else:
+#         return redirect(url_for("final_score"))
+
+#     return redirect(url_for("quiz"))
+
+# # Previous Question
+# @app.route("/prev", methods=["POST"])
+# def prev_question():
+#     if session["current_index"] > 0:
+#         session["current_index"] -= 1
+
+#     return redirect(url_for("quiz"))
+
+# # in prev_question() : revert back item of session['history'] poped
+# # from session['question'] and also check for session['current_index']
+
+# # Submit Answer
+# @app.route("/submit", methods=["POST"])
+# def submit():
+#     if session["current_index"] < len(session["history"]) - 1:
+#         session["current_index"] += 1
+#     elif session["questions"]:
+#         question = session["questions"].pop()
+#         session["history"].append(question)
+#         session["current_index"] = len(session["history"]) - 1
+#     else:
+#         return redirect(url_for("final_score"))
+
+#     return redirect(url_for("quiz"))
+
 @app.route("/next", methods=["POST"])
 def next_question():
     selected_answer = request.form.get("answer", "")
@@ -175,26 +234,31 @@ def next_question():
     if session["current_index"] < len(session["history"]) - 1:
         session["current_index"] += 1
     elif session["questions"]:
+        # Store the last popped question to allow restoring in prev_question()
+        session["last_popped"] = session["questions"][-1]
         question = session["questions"].pop()
         session["history"].append(question)
         session["current_index"] = len(session["history"]) - 1
     else:
         return redirect(url_for("final_score"))
 
+    session.modified = True
     return redirect(url_for("quiz"))
 
-# Previous Question
 @app.route("/prev", methods=["POST"])
 def prev_question():
     if session["current_index"] > 0:
+        # Restore the last popped question if we moved forward previously
+        if "last_popped" in session:
+            session["questions"].append(session["last_popped"])
+            session["history"].pop()  # Remove last added question from history
+            del session["last_popped"]  # Remove the stored question reference
+        
         session["current_index"] -= 1
 
+    session.modified = True
     return redirect(url_for("quiz"))
 
-# in prev_question() : revert back item of session['history'] poped
-# from session['question'] and also check for session['current_index']
-
-# Submit Answer
 @app.route("/submit", methods=["POST"])
 def submit():
     if session["current_index"] < len(session["history"]) - 1:
@@ -206,8 +270,8 @@ def submit():
     else:
         return redirect(url_for("final_score"))
 
+    session.modified = True
     return redirect(url_for("quiz"))
-
 
 # Final Score
 @app.route("/final_score")
