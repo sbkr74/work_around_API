@@ -43,6 +43,9 @@ def init_db():
 
     # Insert sample questions (Run once)
     sample_questions = [
+        ("What is 2 + 2?", "3", "4", "5", "6", "4"),
+        ("What is 3 * 3?", "6", "7", "9", "10", "9"),
+        ("What is 10 / 2?", "3", "4", "5", "6", "5"),
         ("What is 5 + 3?", "6", "7", "8", "9", "8"),
         ("What is 10 - 4?", "5", "6", "7", "8", "6"),
         ("What is 2 * 6?", "10", "11", "12", "13", "12"),
@@ -57,16 +60,7 @@ def init_db():
         cursor.executemany("""
             INSERT INTO questions (question, option_a, option_b, option_c, option_d, answer) VALUES 
             (?, ?, ?, ?, ?, ?)
-        """, [
-            ("What is 2 + 2?", "3", "4", "5", "6", "4"),
-            ("What is 3 * 3?", "6", "7", "9", "10", "9"),
-            ("What is 10 / 2?", "3", "4", "5", "6", "5"),
-            ("What is 5 + 3?", "6", "7", "8", "9", "8"),
-            ("What is 10 - 4?", "5", "6", "7", "8", "6"),
-            ("What is 2 * 6?", "10", "11", "12", "13", "12"),
-            ("What is 15 / 3?", "3", "4", "5", "6", "5"),
-            ("What is 9 + 1?", "8", "9", "10", "11", "10")
-        ])
+        """, sample_questions)
         print("Sample questions inserted!")
     
     conn.commit()
@@ -129,7 +123,7 @@ def login():
             session["questions"] = fetch_questions()  # Load questions
             random.shuffle(session["questions"])  # Shuffle for randomness
             session["history"] = []
-            session["current_index"] = -1
+            session["current_index"] = 0
 
             return redirect(url_for("quiz"))
         else:
@@ -154,16 +148,6 @@ def quiz():
 
     if "questions" not in session or not session["questions"]:
         return redirect(url_for("final_score"))
-    
-    # if session["current_index"] == -1:  # Start quiz
-    #     question = session["questions"].pop()
-    #     session["history"].append(question)
-    #     session["current_index"] = len(session["history"]) - 1
-    
-    # else:
-    #     question = session["history"][session["current_index"]]
-
-    # return render_template("quiz.html", question=question,score=session['score'])
 
     # Fix: Start at index 0 instead of popping a question immediately
     # Ensure at least one question is in history before accessing index 0
@@ -172,6 +156,7 @@ def quiz():
     
     if "total_questions" not in session:  # Store total questions count
         session["total_questions"] = len(session["history"])-1 + len(session["questions"])
+    print(session["total_questions"],len(session["history"])-1 ,len(session["questions"])-1)
 
     # Prevent IndexError
     if session["current_index"] >= len(session["history"]):
@@ -179,52 +164,7 @@ def quiz():
 
     question = session["history"][session["current_index"]]
     
-    return render_template("quiz.html", question=question, score=session['score'],total_questions=session["total_questions"],)
-
-# Next Question
-# @app.route("/next", methods=["POST"])
-# def next_question():
-#     selected_answer = request.form.get("answer", "")
-#     correct_answer = request.form.get("correct_answer", "")
-
-#     if selected_answer == correct_answer:
-#         session["score"] += 1
-
-#     if session["current_index"] < len(session["history"]) - 1:
-#         session["current_index"] += 1
-#     elif session["questions"]:
-#         question = session["questions"].pop()
-#         session["history"].append(question)
-#         session["current_index"] = len(session["history"]) - 1
-#     else:
-#         return redirect(url_for("final_score"))
-
-#     return redirect(url_for("quiz"))
-
-# # Previous Question
-# @app.route("/prev", methods=["POST"])
-# def prev_question():
-#     if session["current_index"] > 0:
-#         session["current_index"] -= 1
-
-#     return redirect(url_for("quiz"))
-
-# # in prev_question() : revert back item of session['history'] poped
-# # from session['question'] and also check for session['current_index']
-
-# # Submit Answer
-# @app.route("/submit", methods=["POST"])
-# def submit():
-#     if session["current_index"] < len(session["history"]) - 1:
-#         session["current_index"] += 1
-#     elif session["questions"]:
-#         question = session["questions"].pop()
-#         session["history"].append(question)
-#         session["current_index"] = len(session["history"]) - 1
-#     else:
-#         return redirect(url_for("final_score"))
-
-#     return redirect(url_for("quiz"))
+    return render_template("quiz.html", question=question, score=session['score'],total_questions=session["total_questions"])
 
 @app.route("/next", methods=["POST"])
 def next_question():
@@ -282,7 +222,7 @@ def final_score():
     score = session.get("score")
     total_questions = len(session.get("history", []))
     session.clear()  # Reset session after quiz ends
-    return render_template("final_score.html", score=score, total_questions=total_questions)
+    return render_template("final_score.html", score=score, total_questions=total_questions-1)
 
 # Run the app
 if __name__ == "__main__":
