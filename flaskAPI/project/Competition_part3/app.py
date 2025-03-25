@@ -165,10 +165,13 @@ def quiz():
 
     # return render_template("quiz.html", question=question,score=session['score'])
 
-     # Fix: Start at index 0 instead of popping a question immediately
+    # Fix: Start at index 0 instead of popping a question immediately
     # Ensure at least one question is in history before accessing index 0
     if not session["history"] and session["questions"]:
         session["history"].append(session["questions"][0])  # Add the first question
+    
+    if "total_questions" not in session:  # Store total questions count
+        session["total_questions"] = len(session["history"])-1 + len(session["questions"])
 
     # Prevent IndexError
     if session["current_index"] >= len(session["history"]):
@@ -176,7 +179,7 @@ def quiz():
 
     question = session["history"][session["current_index"]]
     
-    return render_template("quiz.html", question=question, score=session['score'])
+    return render_template("quiz.html", question=question, score=session['score'],total_questions=session["total_questions"],)
 
 # Next Question
 # @app.route("/next", methods=["POST"])
