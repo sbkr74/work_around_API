@@ -26,7 +26,6 @@
         <!-- Correct answer (hidden input) -->
         <input type="hidden" name="correct_answer" value="{{ question['answer'] }}">
 
-        <!-- <button type="submit">Skip</button> -->
           <!-- Skip button (disabled on last question) -->
         <button type="submit" name="action" value="skip" 
             {% if session["current_index"] == session["total_questions"] - 1 %}disabled{% endif %}>
