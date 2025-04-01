@@ -81,7 +81,6 @@ def reset_quiz():
     """Resets the quiz session when a new user logs in."""
     session['score'] = 0
     session['asked_questions'] = []
-    # session['remaining_questions'] = random.sample(questions, len(questions))
 
 @app.route('/')
 def home():
@@ -108,6 +107,7 @@ def signup():
 
 @app.route('/login', methods=['GET', 'POST'])
 def login():
+    msg = ""
     if request.method == 'POST':
         username = request.form['username']
         password = request.form['password']
@@ -122,9 +122,9 @@ def login():
                 reset_quiz()  # Reset quiz for the new user
                 return redirect(url_for('get_question'))
             else:
-                return "Invalid username or password. Try again."
+                msg = "Invalid username or password. Try again."
 
-    return render_template('login.html')
+    return render_template('login.html',msg=msg)
 
 @app.route('/logout')
 def logout():
