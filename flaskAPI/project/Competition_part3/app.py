@@ -83,6 +83,12 @@ def home():
         return redirect(url_for('login'))
     return redirect(url_for('quiz'))
 
+def reset_quiz():
+    """Resets the quiz session when a new user logs in."""
+    session['score'] = 0
+    session["history"] = []
+    session["current_index"] = 0
+
 # User Signup
 @app.route("/signup", methods=["GET", "POST"])
 def signup():
@@ -107,6 +113,7 @@ def signup():
 # User Login
 @app.route("/login", methods=["GET", "POST"])
 def login():
+    msg = ""
     if request.method == "POST":
         username = request.form["username"]
         password = request.form["password"]
@@ -119,17 +126,14 @@ def login():
 
         if user:
             session["username"] = username
-            session["score"] = 0  # Reset score
+            reset_quiz()
             session["questions"] = fetch_questions()  # Load questions
             random.shuffle(session["questions"])  # Shuffle for randomness
-            session["history"] = []
-            session["current_index"] = 0
-
             return redirect(url_for("quiz"))
         else:
-            return "Invalid username or password!"
+            msg = "Invalid username or password!"
 
-    return render_template("login.html")
+    return render_template("login.html",msg=msg)
 
 # Logout
 @app.route("/logout")
@@ -156,7 +160,6 @@ def quiz():
     
     if "total_questions" not in session:  # Store total questions count
         session["total_questions"] = len(session["history"])-1 + len(session["questions"])
-    print(session["total_questions"],len(session["history"])-1 ,len(session["questions"])-1)
 
     # Prevent IndexError
     if session["current_index"] >= len(session["history"]):
@@ -168,12 +171,6 @@ def quiz():
 
 @app.route("/next", methods=["POST"])
 def next_question():
-    selected_answer = request.form.get("answer", "")
-    correct_answer = request.form.get("correct_answer", "")
-
-    if selected_answer == correct_answer:
-        session["score"] += 1
-
     if session["current_index"] < len(session["history"]) - 1:
         session["current_index"] += 1
     elif session["questions"]:
@@ -212,7 +209,12 @@ def submit():
         session["current_index"] = len(session["history"]) - 1
     else:
         return redirect(url_for("final_score"))
+    
+    selected_answer = request.form.get("answer", "")
+    correct_answer = request.form.get("correct_answer", "")
 
+    if selected_answer == correct_answer:
+        session['score'] += 1 
     session.modified = True
     return redirect(url_for("quiz"))
 
