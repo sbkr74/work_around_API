@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quiz Questions</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 20px; }
+        .question { margin-bottom: 20px; padding: 10px; border: 1px solid #ddd; border-radius: 5px; }
+        .options { margin-left: 20px; }
+    </style>
+</head>
+<body>
+
+    <h1>Quiz Questions</h1>
+
+    {% for q in questions %}
+    <div class="question">
+        <p><strong>Q{{ q[0] }}:</strong> {{ q[1] | safe_nl2br }}</p>
+        <div class="options">
+            <p>A. {{ q[2] | e }}</p>
+            <p>B. {{ q[3] | e }}</p>
+            <p>C. {{ q[4] | e }}</p>
+            <p>D. {{ q[5] | e }}</p>
+        </div>
+    </div>
+    {% endfor %}
+
+</body>
+</html>
