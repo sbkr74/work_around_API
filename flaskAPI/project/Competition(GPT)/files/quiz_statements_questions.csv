@@ -1,0 +1,61 @@
+question_number,question_text,option_a,option_b,option_c,option_d,correct_option
+1,"Which of the following is not a correct statement?
+
+I. Flask is a Python framework for building desktop apps.
+II. Flask uses Jinja2 for templating.
+III. Flask supports decorators for routing.
+IV. Flask comes with a built-in ORM.",Only II is correct,II and III are incorrect,All are incorrect,II and III are correct,B
+2,"Which of the following is not a correct statement?
+
+I. Python lists are mutable.
+II. Tuples in Python are mutable.
+III. Sets allow duplicate elements.
+IV. Dictionaries store key-value pairs.",I and IV are correct,II and III are incorrect,Only III is correct,"I, II and III are correct",B
+3,"Which of the following is not a correct statement?
+
+I. SELECT * FROM table returns all columns.
+II. GROUP BY is used with aggregate functions.
+III. INNER JOIN always returns unmatched rows.
+IV. ORDER BY sorts data in SQL.",Only I is correct,III is incorrect,III and IV are incorrect,All are correct,B
+4,"Which of the following is not a correct statement?
+
+I. Python supports multiple inheritance.
+II. super() is used to call a subclass method.
+III. __init__() is a constructor in Python.
+IV. self represents the instance in a class.",Only II is incorrect,II and IV are correct,"I, II and III are correct",All are incorrect,A
+5,"Which of the following is not a correct statement?
+
+I. Flask can only be used with SQLite.
+II. Flask apps can have multiple routes.
+III. render_template() returns an HTML page.
+IV. Flask supports JSON responses.",Only I is incorrect,II and III are correct,I and III are incorrect,"I, II and IV are correct",A
+6,"Which of the following is not a correct statement?
+
+I. CSV stands for Comma Separated Values.
+II. A CSV file can store only integers.
+III. Python’s csv module is used to read CSV files.
+IV. CSV files can be opened in Excel.",II is incorrect,Only III is correct,I and IV are incorrect,All are incorrect,A
+7,"Which of the following is not a correct statement?
+
+I. HTML is a programming language.
+II. <div> is a generic container tag.
+III. <p> is used for paragraphs.
+IV. <table> is used for form elements.",I and IV are incorrect,II and III are incorrect,All are correct,Only I is incorrect,A
+8,"Which of the following is not a correct statement?
+
+I. Python uses indentation to define blocks.
+II. break is used to exit a loop.
+III. continue exits the current program.
+IV. pass is a placeholder statement.",I and IV are correct,III is incorrect,Only II is correct,All are correct,B
+9,"Which of the following is not a correct statement?
+
+I. pip installs Python packages.
+II. venv creates virtual environments.
+III. import is used to install packages.
+IV. requirements.txt lists dependencies.",I and II are incorrect,Only III is incorrect,II and III are incorrect,III and IV are correct,B
+10,"Which of the following is not a correct statement?
+
+I. SQLite is a file-based database.
+II. SQLite supports joins and subqueries.
+III. SQLite is not part of Python's standard library.
+IV. SQLite is useful for lightweight applications.",Only III is incorrect,I and II are correct,III and IV are incorrect,All are incorrect,A
