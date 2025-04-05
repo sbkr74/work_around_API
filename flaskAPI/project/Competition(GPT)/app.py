@@ -58,13 +58,22 @@ def show_question(question_index):
 
     if request.method == 'POST':
         selected_option = request.form.get('option')
+        action = request.form.get('action')
+
         qid = question_ids[question_index]
-        responses[str(qid)] = selected_option  # Only latest answer retained
-        session['responses'] = responses
+        if selected_option:
+            responses[str(qid)] = selected_option
+            session['responses'] = responses
 
-    if question_index < 0 or question_index >= len(question_ids):
-        return redirect(url_for('final_score'))  # or a 404
+        # Handle navigation logic
+        if action == 'next':
+            return redirect(url_for('show_question', question_index=question_index + 1))
+        elif action == 'prev':
+            return redirect(url_for('show_question', question_index=question_index - 1))
+        elif action == 'finish':
+            return redirect(url_for('final_score'))
 
+    # GET method
     qid = question_ids[question_index]
     question = get_question_by_id(qid)
 
@@ -72,7 +81,7 @@ def show_question(question_index):
         question=question,
         index=question_index,
         total=len(question_ids),
-        selected=responses.get(str(qid)),
+        selected=responses.get(str(qid))
     )
 
 @app.route('/final')
