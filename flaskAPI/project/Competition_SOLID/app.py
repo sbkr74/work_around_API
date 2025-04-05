@@ -1,87 +1,17 @@
 from flask import Flask, render_template, request, redirect, url_for, session
-import sqlite3
-import random
-import os
+
+# from resources.authentication import login
 
 app = Flask(__name__)
-app.secret_key = os.urandom(24) # Required for session management
+# app.secret_key = os.urandom(24) # Required for session management
 
 DATABASE = r"flaskAPI/project/Competition_part3/files/quiz.db"
 
-# Database connection
-def get_db():
-    conn = sqlite3.connect(DATABASE)
-    conn.row_factory = sqlite3.Row  # Enables dictionary-like row access
-    return conn
-
-# Initialize database (Run only once)
-def init_db():
-    conn = get_db()
-    cursor = conn.cursor()
-
-    # Create users table
-    cursor.execute("""
-        CREATE TABLE IF NOT EXISTS users (
-            id INTEGER PRIMARY KEY AUTOINCREMENT,
-            username TEXT UNIQUE NOT NULL,
-            password TEXT NOT NULL
-        )
-    """)
-
-    # Create questions table
-    cursor.execute("""
-        CREATE TABLE IF NOT EXISTS questions (
-            id INTEGER PRIMARY KEY AUTOINCREMENT,
-            question TEXT NOT NULL,
-            option_a TEXT NOT NULL,
-            option_b TEXT NOT NULL,
-            option_c TEXT NOT NULL,
-            option_d TEXT NOT NULL,
-            answer TEXT NOT NULL
-        )
-    """)
-
-    # Insert sample questions (Run once)
-    sample_questions = [
-        ("What is 2 + 2?", "3", "4", "5", "6", "4"),
-        ("What is 3 * 3?", "6", "7", "9", "10", "9"),
-        ("What is 10 / 2?", "3", "4", "5", "6", "5"),
-        ("What is 5 + 3?", "6", "7", "8", "9", "8"),
-        ("What is 10 - 4?", "5", "6", "7", "8", "6"),
-        ("What is 2 * 6?", "10", "11", "12", "13", "12"),
-        ("What is 15 / 3?", "3", "4", "5", "6", "5"),
-        ("What is 9 + 1?", "8", "9", "10", "11", "10"),
-    ]
-    
-
-    # Insert sample questions if the table is empty
-    cursor.execute("SELECT COUNT(*) FROM questions")
-    if cursor.fetchone()[0] == 0:  # ✅ Insert only if table is empty
-        cursor.executemany("""
-            INSERT INTO questions (question, option_a, option_b, option_c, option_d, answer) VALUES 
-            (?, ?, ?, ?, ?, ?)
-        """, sample_questions)
-        print("Sample questions inserted!")
-    
-    conn.commit()
-    conn.close()
-    print("Database initialized successfully!")
-init_db()  # Run only once to initialize database
-
-# Fetch questions from database
-def fetch_questions():
-    db = get_db()
-    cursor = db.cursor()
-    cursor.execute("SELECT * FROM questions")
-    questions = cursor.fetchall()
-    db.close()
-    return [dict(q) for q in questions]  # Convert to list of dictionaries
-
-@app.route('/')
-def home():
-    if 'user' not in session:
-        return redirect(url_for('login'))
-    return redirect(url_for('quiz'))
+# @app.route('/')
+# def home():
+#     if 'user' not in session:
+#         return redirect(url_for('login'))
+#     return redirect(url_for('quiz'))
 
 def reset_quiz():
     """Resets the quiz session when a new user logs in."""
@@ -89,57 +19,7 @@ def reset_quiz():
     session["history"] = []
     session["current_index"] = 0
 
-# User Signup
-@app.route("/signup", methods=["GET", "POST"])
-def signup():
-    if request.method == "POST":
-        username = request.form["username"]
-        password = request.form["password"]
 
-        conn = get_db()
-        cursor = conn.cursor()
-
-        try:
-            cursor.execute("INSERT INTO users (username, password) VALUES (?, ?)", (username, password))
-            conn.commit()
-            return redirect(url_for("login"))
-        except sqlite3.IntegrityError:
-            return "Username already exists! Try a different one."
-        finally:
-            conn.close()
-
-    return render_template("signup.html")
-
-# User Login
-@app.route("/login", methods=["GET", "POST"])
-def login():
-    msg = ""
-    if request.method == "POST":
-        username = request.form["username"]
-        password = request.form["password"]
-
-        conn = get_db()
-        cursor = conn.cursor()
-        cursor.execute("SELECT * FROM users WHERE username = ? AND password = ?", (username, password))
-        user = cursor.fetchone()
-        conn.close()
-
-        if user:
-            session['user'] = username
-            reset_quiz()
-            session["questions"] = fetch_questions()  # Load questions
-            random.shuffle(session["questions"])  # Shuffle for randomness
-            return redirect(url_for("quiz"))
-        else:
-            msg = "Invalid username or password!"
-
-    return render_template("login.html",msg=msg)
-
-# Logout
-@app.route("/logout")
-def logout():
-    session.clear()  # Clears all session data
-    return redirect(url_for("login"))
 
 # Quiz logic with Previous and Next buttons
 @app.route("/quiz")
