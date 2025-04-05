@@ -1,11 +1,10 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
     <title>Quiz</title>
 </head>
 <body>
-    <h3>Q{{ question[0] }}:</h3>
-    <p>{{ question[1] | safe_nl2br }}</p>
+    <p>Q{{ index+1 }}: {{ question[1] | safe_nl2br }}</p>
 
     <form method="POST">
         {% for letter, option in [('A', question[2]), ('B', question[3]), ('C', question[4]), ('D', question[5])] %}
@@ -17,18 +16,19 @@
         {% endfor %}
 
         <br>
+
+        <!-- Submit and go to previous -->
         {% if index > 0 %}
-            <a href="{{ url_for('show_question', question_index=index-1) }}">
-                <button type="button">Previous</button>
-            </a>
+        <button type="submit" name="action" value="prev">Previous</button>
         {% else %}
-            <button type="button" disabled>Previous</button>
+        <button type="button" disabled>Previous</button>
         {% endif %}
 
+        <!-- Submit and go to next -->
         {% if index < total - 1 %}
-            <button type="submit" formaction="{{ url_for('show_question', question_index=index+1) }}">Next</button>
+        <button type="submit" name="action" value="next">Next</button>
         {% else %}
-            <button type="submit" formaction="{{ url_for('final_score') }}">Finish</button>
+        <button type="submit" name="action" value="finish">Finish</button>
         {% endif %}
     </form>
 </body>
