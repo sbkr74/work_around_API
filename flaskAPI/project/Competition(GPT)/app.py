@@ -53,38 +53,46 @@ def show_question(question_index):
     question_ids = session.get('question_ids')
     responses = session.get('responses', {})
 
-    if question_ids is None:
+    if not question_ids or question_index < 0 or question_index >= len(question_ids):
         return redirect(url_for('start_quiz'))
+
+    qid = question_ids[question_index]
+    question = get_question_by_id(qid)
+
+    selected_option = responses.get(str(qid))
 
     if request.method == 'POST':
         selected_option = request.form.get('option')
-        action = request.form.get('action')
 
-        qid = question_ids[question_index]
-        if selected_option:
+        if selected_option != "":
             responses[str(qid)] = selected_option
-            session['responses'] = responses
+        else:
+            responses.pop(str(qid), None)
 
-        # Handle navigation logic
+        session['responses'] = responses
+
+        # Check if the user came from review page
+        return_to_review = request.args.get('from_review')
+        action = request.form['action']
+
+        if return_to_review == '1':
+            return redirect(url_for('review'))
+
         if action == 'next':
             return redirect(url_for('show_question', question_index=question_index + 1))
         elif action == 'prev':
             return redirect(url_for('show_question', question_index=question_index - 1))
-        elif action == 'finish':
-            return redirect(url_for('final_score'))
         elif action == 'review':
             return redirect(url_for('review'))
-
-    # GET method
-    qid = question_ids[question_index]
-    question = get_question_by_id(qid)
+        elif action == 'finish':
+            return redirect(url_for('final_score'))
 
     return render_template('quiz.html',
-        question=question,
-        index=question_index,
-        total=len(question_ids),
-        selected=responses.get(str(qid))
-    )
+                           question=question,
+                           index=question_index,
+                           total=len(question_ids),
+                           selected=selected_option)
+
 
 @app.route('/review')
 def review():
