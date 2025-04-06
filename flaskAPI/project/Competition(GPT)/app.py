@@ -100,6 +100,7 @@ def review():
         question = get_question_by_id(qid)
         selected = responses.get(str(qid))
         review_data.append({
+            'index': idx,           # <- for edit button
             'number': idx + 1,
             'question': question[1],
             'options': {
