@@ -72,6 +72,8 @@ def show_question(question_index):
             return redirect(url_for('show_question', question_index=question_index - 1))
         elif action == 'finish':
             return redirect(url_for('final_score'))
+        elif action == 'review':
+            return redirect(url_for('review'))
 
     # GET method
     qid = question_ids[question_index]
@@ -83,6 +85,33 @@ def show_question(question_index):
         total=len(question_ids),
         selected=responses.get(str(qid))
     )
+
+@app.route('/review')
+def review():
+    question_ids = session.get('question_ids')
+    responses = session.get('responses', {})
+
+    if not question_ids:
+        return redirect(url_for('start_quiz'))
+
+    review_data = []
+
+    for idx, qid in enumerate(question_ids):
+        question = get_question_by_id(qid)
+        selected = responses.get(str(qid))
+        review_data.append({
+            'number': idx + 1,
+            'question': question[1],
+            'options': {
+                'A': question[2],
+                'B': question[3],
+                'C': question[4],
+                'D': question[5],
+            },
+            'selected': selected
+        })
+
+    return render_template('review.html', review_data=review_data)
 
 @app.route('/final')
 def final_score():
