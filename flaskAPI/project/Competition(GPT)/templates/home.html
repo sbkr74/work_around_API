@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <title>Homepage</title>
+        <style>
+            body{
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                height: 70vh;
+            }
+
+            h1{
+                text-align: center;
+                color: black;
+                text-decoration: double;
+            }
+
+            .instruction-block{ 
+                padding: 20px;
+                border-radius: 10px;
+                box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+                max-width: 680px;
+                width: 100%;
+                align-items: center;
+            }
+
+            button {
+                margin-left: 300px;
+                display: block;
+                width: fit-content;
+                padding: 10px;
+                background-color: #4CAF50;
+                color: white;
+                border: none;
+                border-radius: 5px;
+                font-size: 1em;
+                cursor: pointer;
+                transition: background-color 0.3s ease;
+            }
+
+            button:hover {
+                background-color: #45a049;
+            }
+
+            p{
+                font-family: Arial, sans-serif;
+                font-size: medium;
+            }
+
+            a{
+                text-decoration: none;
+                color: #fff;
+            }
+        </style>
+    </head>
+    <body>
+        
+        <div class = "instruction-block">
+            <h1>Instruction</h1>
+            <p>
+                1. Read the questions carefully. If have any doubt conselt with Room Invigilator.<br>
+                2. Each question carries 1 mark. For now their is no negative marking for wrong attempt.<br>
+                3. Multiple attempts are allowed.<br>
+                4. You can Navigate between questions. Use prev to go previous and next to next question.<br>
+                5. Use Review to check if you have unanswered questions.
+            </p>
+            <button><a href="{{ url_for('start_quiz') }}">Start Test</a></button>
+        </div>
+        
+    </body>
+</html>

@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Final Score</title>
+    <style>
+        .correct { background-color: #d4edda; }
+        .incorrect { background-color: #f8d7da; }
+        .unanswered { background-color: #fff3cd; }
+        .question-block { padding: 1em; margin-bottom: 1em; border-radius: 8px; border: 1px solid #ccc; }
+    </style>
+</head>
+<body>
+    <h1>Your Final Score: {{ score }} / {{ total }}</h1>
+
+    {% for item in review_data %}
+    <div class="question-block 
+        {% if item.selected is none %}unanswered
+        {% elif item.is_correct %}correct
+        {% else %}incorrect
+        {% endif %}">
+
+        <p><strong>Q{{ item.index + 1 }}:</strong><br>{{ item.question | safe_nl2br}}</p>
+
+        <ul>
+            {% for key, text in item.options.items() %}
+                <li>
+                    {{ key }}. {{ text }}
+                    {% if key == item.selected %}
+                        <strong> ← your answer</strong>
+                    {% endif %}
+                    {% if key == item.correct %}
+                        <span style="color: green;"> (correct)</span>
+                    {% endif %}
+                </li>
+            {% endfor %}
+        </ul>
+
+        {% if item.selected is none %}
+            <p><em>You did not answer this question.</em></p>
+        {% elif item.is_correct %}
+            <p style="color: green;"><strong>Correct!</strong></p>
+        {% else %}
+            <p style="color: red;"><strong>Incorrect.</strong></p>
+        {% endif %}
+    </div>
+    {% endfor %}
+
+    <a href="{{ url_for('start_quiz') }}">
+        <button>Restart Quiz</button>
+    </a>
+</body>
+</html>

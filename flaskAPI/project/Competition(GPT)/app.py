@@ -30,15 +30,20 @@ def get_question_by_id(q_id):
     conn = sqlite3.connect(DATABASE)
     cur = conn.cursor()
     cur.execute("""
-        SELECT question_number, question_text, option_a, option_b, option_c, option_d
+        SELECT question_number, question_text, option_a, option_b, option_c, option_d, correct_option
         FROM questions WHERE id = ?
     """, (q_id,))
     row = cur.fetchone()
     conn.close()
     return row
 
+@app.route('/')
+def home():
+    return render_template("home.html")
+
 @app.route('/start')
 def start_quiz():
+    # session.clear()         # ... rest of the quiz start logic
     # Get all question IDs and shuffle
     question_ids = get_all_question_ids()
     random.shuffle(question_ids)
@@ -122,9 +127,45 @@ def review():
 
     return render_template('review.html', review_data=review_data)
 
-@app.route('/final')
+@app.route('/final_score')
 def final_score():
-    return "<h2>Final score coming soon...</h2>"  # Will be updated later
+    question_ids = session.get('question_ids')
+    responses = session.get('responses', {})
+
+    if not question_ids:
+        return redirect(url_for('start_quiz'))
+
+    review_data = []
+    score = 0
+
+    for idx, qid in enumerate(question_ids):
+        question = get_question_by_id(qid)
+        selected = responses.get(str(qid))
+        correct = question[6]  # assuming answer is at index 6 (0-based)
+        
+        is_correct = selected == correct
+        if selected is not None and selected != "":
+            if is_correct:
+                score += 1
+        else:
+            selected = None  # normalize unanswered
+
+        review_data.append({
+            'index': idx,
+            'question': question[1],
+            'options': {
+                'A': question[2],
+                'B': question[3],
+                'C': question[4],
+                'D': question[5],
+            },
+            'correct': correct,
+            'selected': selected,
+            'is_correct': is_correct if selected else None,
+        })
+
+    return render_template('final_score.html', review_data=review_data, score=score, total=len(question_ids))
+
 
 if __name__ == "__main__":
     app.run(debug=True)

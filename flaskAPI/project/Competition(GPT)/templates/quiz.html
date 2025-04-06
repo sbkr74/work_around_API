@@ -2,15 +2,53 @@
 <html lang="en">
 <head>
     <title>Quiz</title>
+    <style>
+        body{
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            height: 70vh;
+            background-color: rgb(31, 123, 169);
+        }
+
+        .quiz-block{ 
+            background-color: aliceblue;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            max-width: 620px;
+            width: 100%;
+            align-items: center;
+        }
+
+        p{
+            font-family: Arial, sans-serif;
+            font-size: large;
+        }
+
+        button{
+            display: inline-block;
+            width: fit-content;
+            padding: 10px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            font-size: 1em;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+    </style>
 </head>
 <body>
+    <div class="quiz-block">
     <p>Q{{ index+1 }}: {{ question[1] | safe_nl2br }}</p>
 
     <form method="POST">
         {% for letter, option in [('A', question[2]), ('B', question[3]), ('C', question[4]), ('D', question[5])] %}
             <label>
                 <input type="radio" name="option" value="{{ letter }}"
-                    {% if selected == letter %}checked{% endif %}onclick="toggleOption(this)">
+                    {% if selected == letter %}checked{% endif %} onclick="toggleOption(this)">
                 {{ letter }}. {{ option }}
             </label><br>
         {% endfor %}
@@ -36,6 +74,7 @@
 
         {% endif %}
     </form>
+</div>
 
     <script>
         let lastChecked = null;
