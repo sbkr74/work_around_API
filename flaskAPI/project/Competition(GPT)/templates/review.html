@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang ='en'>
+<html>
 <head>
     <title>Review Answers</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
@@ -10,22 +10,37 @@
     <h3 class="mb-4">Review Your Answers</h3>
 
     {% for item in review_data %}
-    <div class="card mb-3">
-        <div class="card-header">
-            Question {{ item.number }}
+    <div class="card mb-3 border 
+        {% if not item.selected %}
+            border-danger
+        {% else %}
+            border-secondary
+        {% endif %}
+    ">
+        <div class="card-header d-flex justify-content-between align-items-center">
+            <div>
+                Question {{ item.number }}
+                {% if not item.selected %}
+                    <span class="badge bg-danger ms-2">Unanswered</span>
+                {% endif %}
+            </div>
+            <a href="{{ url_for('show_question', question_index=item.index) }}" class="btn btn-sm btn-outline-primary">Edit</a>
         </div>
+
         <div class="card-body">
             <p class="card-text">{{ item.question | safe_nl2br }}</p>
             <ul class="list-group">
                 {% for letter, text in item.options.items() %}
-                    <li class="list-group-item 
-                        {% if letter == item.selected %}
-                            list-group-item-info
-                        {% endif %}
-                    ">
-                        <strong>{{ letter }}.</strong> {{ text }}
-                        {% if letter == item.selected %} <span class="text-success">(Selected)</span>{% endif %}
-                    </li>
+                <li class="list-group-item 
+                    {% if letter == item.selected %}
+                        list-group-item-info
+                    {% endif %}
+                ">
+                    <strong>{{ letter }}.</strong> {{ text }}
+                    {% if letter == item.selected %}
+                        <span class="text-success">(Selected)</span>
+                    {% endif %}
+                </li>
                 {% endfor %}
             </ul>
         </div>
