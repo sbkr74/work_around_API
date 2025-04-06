@@ -10,10 +10,13 @@
         {% for letter, option in [('A', question[2]), ('B', question[3]), ('C', question[4]), ('D', question[5])] %}
             <label>
                 <input type="radio" name="option" value="{{ letter }}"
-                    {% if selected == letter %}checked{% endif %}>
+                    {% if selected == letter %}checked{% endif %}onclick="toggleOption(this)">
                 {{ letter }}. {{ option }}
             </label><br>
         {% endfor %}
+
+        <!-- Hidden input to force empty submission -->
+        <input type="hidden" name="option" value="" id="option-hidden">
 
         <br>
 
@@ -33,5 +36,24 @@
 
         {% endif %}
     </form>
+
+    <script>
+        let lastChecked = null;
+        
+        function toggleOption(radio) {
+            const hiddenInput = document.getElementById('option-hidden');
+        
+            if (lastChecked === radio) {
+                // Uncheck and reset
+                radio.checked = false;
+                lastChecked = null;
+                hiddenInput.disabled = false;  // keep hidden input for blank value
+            } else {
+                lastChecked = radio;
+                hiddenInput.disabled = true;  // disable hidden input so real value goes
+            }
+        }
+    </script>
+
 </body>
 </html>
