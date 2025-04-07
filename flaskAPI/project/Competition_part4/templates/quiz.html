@@ -1,0 +1,36 @@
+<!-- quiz.html -->
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Quiz</title>
+</head>
+<body>
+    <h2>Question {{ session['current_index'] + 1 }} of {{ session['total_questions'] }}</h2>
+    <p>{{ question['question'] }}</p>
+    <form method="POST" action="{{ url_for('submit') }}">
+        <input type="hidden" name="question_id" value="{{ question['id'] }}">
+        <label>
+            <input type="radio" name="answer" value="{{ question['option_a'] }}" {% if user_answer == question['option_a'] %}checked{% endif %}> {{ question['option_a'] }}
+        </label><br>
+        <label>
+            <input type="radio" name="answer" value="{{ question['option_b'] }}" {% if user_answer == question['option_b'] %}checked{% endif %}> {{ question['option_b'] }}
+        </label><br>
+        <label>
+            <input type="radio" name="answer" value="{{ question['option_c'] }}" {% if user_answer == question['option_c'] %}checked{% endif %}> {{ question['option_c'] }}
+        </label><br>
+        <label>
+            <input type="radio" name="answer" value="{{ question['option_d'] }}" {% if user_answer == question['option_d'] %}checked{% endif %}> {{ question['option_d'] }}
+        </label><br>
+        <br>
+        <button type="submit">Submit</button>
+    </form>
+    <br>
+    <form method="POST" action="{{ url_for('prev_question') }}">
+        <button type="submit" {% if session['current_index'] == 0 %}disabled{% endif %}>Previous</button>
+    </form>
+    <form method="POST" action="{{ url_for('next_question') }}">
+        <button type="submit">Next</button>
+    </form>
+    <p>Score: {{ score }}</p>
+</body>
+</html>
