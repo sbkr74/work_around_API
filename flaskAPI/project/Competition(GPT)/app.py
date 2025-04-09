@@ -1,12 +1,15 @@
 from flask import Flask, render_template, session, redirect, url_for, request
 import sqlite3, random
 import html
+import os
 from markupsafe import Markup
 
 app = Flask(__name__)
-app.secret_key = 'your-secret-key'  # Needed for session
+app.secret_key = os.urandom(24)   # Needed for session
 
-DATABASE = r'flaskAPI\project\Competition(GPT)\data\quiz.db'
+DATABASE = r'flaskAPI\project\Competition(GPT)\data\quiz1.db'
+csv_path = r'flaskAPI\project\Competition(GPT)\files\jpsc_gs.csv'
+
 # Custom filter to escape HTML and add <br> for newlines
 def safe_nl2br(value):
     escaped = html.escape(value)          # Escapes <, >, ", etc.
@@ -136,19 +139,21 @@ def final_score():
         return redirect(url_for('start_quiz'))
 
     review_data = []
-    score = 0
+    score = 0.0  # Make it float for fractional deductions
 
     for idx, qid in enumerate(question_ids):
         question = get_question_by_id(qid)
         selected = responses.get(str(qid))
-        correct = question[6]  # assuming answer is at index 6 (0-based)
-        
-        is_correct = selected == correct
-        if selected is not None and selected != "":
-            if is_correct:
-                score += 1
+        correct = question[6]
+
+        if selected == correct:
+            is_correct = True
+            score += 1
+        elif selected is None or selected == "":
+            is_correct = None  # Skipped
         else:
-            selected = None  # normalize unanswered
+            is_correct = False
+            score -= 0.25
 
         review_data.append({
             'index': idx,
@@ -161,10 +166,31 @@ def final_score():
             },
             'correct': correct,
             'selected': selected,
-            'is_correct': is_correct if selected else None,
+            'is_correct': is_correct,
         })
 
-    return render_template('final_score.html', review_data=review_data, score=score, total=len(question_ids))
+    total = len(question_ids)
+    percentage = max((score / total) * 100, 0)
+
+    # Performance based on percentage
+    if percentage == 100:
+        performance = "Outstanding"
+    elif percentage >= 80:
+        performance = "Excellent"
+    elif percentage >= 60:
+        performance = "Good"
+    elif percentage >= 40:
+        performance = "Needs Improvement"
+    else:
+        performance = "Try Again"
+
+    return render_template('final_score.html',
+                           review_data=review_data,
+                           score=round(score, 2),
+                           total=total,
+                           percentage=round(percentage, 2),
+                           performance=performance)
+
 
 
 if __name__ == "__main__":
