@@ -3,6 +3,34 @@
 <head>
     <title>Final Score</title>
     <style>
+        h1 {
+            text-align: center;
+            color: #333;
+        }
+        .button-container {
+            display: flex;
+            justify-content: center;
+            gap: 10px; /* Adds space between buttons */
+            margin-bottom: 20px; /* Adds some space above the buttons */
+        }
+        button {
+            flex: 1;
+            min-width: 100px;
+            max-width: 200px;
+            padding: 10px;
+            background-color: #5a76f4;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            font-size: 1em;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+            text-align: center;
+        }
+        button:hover {
+            background-color: #45a049;
+        }
+
         .correct { background-color: #d4edda; }
         .incorrect { background-color: #f8d7da; }
         .unanswered { background-color: #fff3cd; }
@@ -11,6 +39,11 @@
 </head>
 <body>
     <h1>Your Final Score: {{ score }} / {{ total }}</h1>
+    <div class="button-container">
+        <a href="{{ url_for('start_quiz') }}">
+            <button>Restart Quiz</button>
+        </a>
+    </div>
 
     {% for item in review_data %}
     <div class="question-block 
@@ -45,8 +78,5 @@
     </div>
     {% endfor %}
 
-    <a href="{{ url_for('start_quiz') }}">
-        <button>Restart Quiz</button>
-    </a>
 </body>
 </html>
