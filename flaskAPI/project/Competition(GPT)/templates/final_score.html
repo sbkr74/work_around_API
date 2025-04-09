@@ -1,82 +1,222 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <title>Final Score</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quiz Results</title>
     <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #f5f7fa;
+        }
+        
         h1 {
             text-align: center;
-            color: #333;
+            color: #2c3e50;
+            margin-bottom: 30px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid #eaecef;
         }
+        
+        .score-display {
+            text-align: center;
+            font-size: 1.2em;
+            margin-bottom: 30px;
+            padding: 15px;
+            background-color: #ffffff;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        
         .button-container {
             display: flex;
             justify-content: center;
-            gap: 10px; /* Adds space between buttons */
-            margin-bottom: 20px; /* Adds some space above the buttons */
+            gap: 15px;
+            margin-bottom: 30px;
+            flex-wrap: wrap;
         }
+        
         button {
-            flex: 1;
-            min-width: 100px;
-            max-width: 200px;
-            padding: 10px;
+            min-width: 150px;
+            padding: 12px 20px;
             background-color: #5a76f4;
             color: white;
             border: none;
-            border-radius: 5px;
+            border-radius: 6px;
             font-size: 1em;
             cursor: pointer;
-            transition: background-color 0.3s ease;
+            transition: all 0.3s ease;
             text-align: center;
+            font-weight: 600;
         }
+        
         button:hover {
-            background-color: #45a049;
+            background-color: #3a56d4;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
         }
-
-        .correct { background-color: #d4edda; }
-        .incorrect { background-color: #f8d7da; }
-        .unanswered { background-color: #fff3cd; }
-        .question-block { padding: 1em; margin-bottom: 1em; border-radius: 8px; border: 1px solid #ccc; }
+        
+        .question-block {
+            padding: 20px;
+            margin-bottom: 20px;
+            border-radius: 8px;
+            border-left: 5px solid;
+            background-color: white;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+            transition: all 0.3s ease;
+            display: none; /* Hidden by default */
+        }
+        
+        .question-block:hover {
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+        
+        .correct {
+            border-left-color: #28a745;
+            background-color: #e8f5e9;
+        }
+        
+        .incorrect {
+            border-left-color: #dc3545;
+            background-color: #ffebee;
+        }
+        
+        .unanswered {
+            border-left-color: #ffc107;
+            background-color: #fff8e1;
+        }
+        
+        .question-block strong {
+            color: #2c3e50;
+        }
+        
+        .question-block ul {
+            padding-left: 20px;
+            margin: 15px 0;
+        }
+        
+        .question-block li {
+            margin-bottom: 8px;
+            padding: 8px;
+            border-radius: 4px;
+            background-color: rgba(255,255,255,0.7);
+        }
+        
+        .feedback {
+            padding: 10px;
+            border-radius: 4px;
+            margin-top: 10px;
+            font-weight: 600;
+        }
+        
+        .correct-answer {
+            color: #28a745;
+        }
+        
+        .incorrect-answer {
+            color: #dc3545;
+        }
+        
+        .unanswered-message {
+            color: #ffc107;
+        }
+        
+        .results-container {
+            display: none; /* Initially hidden */
+        }
+        
+        @media (max-width: 600px) {
+            .button-container {
+                flex-direction: column;
+                align-items: center;
+            }
+            
+            button {
+                width: 100%;
+            }
+        }
     </style>
 </head>
 <body>
-    <h1>Your Final Score: {{ score }} / {{ total }}</h1>
+    <h1>Quiz Results</h1>
+    <div class="score-display">
+        You scored <strong>{{ score }} out of {{ total }}</strong> 
+        ({{ "%.1f"|format(score/total*100) }}%)
+    </div>
+    
     <div class="button-container">
         <a href="{{ url_for('start_quiz') }}">
             <button>Restart Quiz</button>
         </a>
+        <button id="showResultsBtn">Show Detailed Results</button>
+        <button onclick="window.print()">Print Results</button>
     </div>
 
-    {% for item in review_data %}
-    <div class="question-block 
-        {% if item.selected is none %}unanswered
-        {% elif item.is_correct %}correct
-        {% else %}incorrect
-        {% endif %}">
+    <div id="resultsContainer" class="results-container">
+        {% for item in review_data %}
+        <div class="question-block 
+            {% if item.selected is none %}unanswered
+            {% elif item.is_correct %}correct
+            {% else %}incorrect
+            {% endif %}">
 
-        <p><strong>Q{{ item.index + 1 }}:</strong><br>{{ item.question | safe_nl2br}}</p>
+            <p><strong>Question {{ item.index + 1 }}:</strong><br>{{ item.question | safe_nl2br}}</p>
 
-        <ul>
-            {% for key, text in item.options.items() %}
-                <li>
-                    {{ key }}. {{ text }}
-                    {% if key == item.selected %}
-                        <strong> ← your answer</strong>
-                    {% endif %}
-                    {% if key == item.correct %}
-                        <span style="color: green;"> (correct)</span>
-                    {% endif %}
-                </li>
-            {% endfor %}
-        </ul>
+            <ul>
+                {% for key, text in item.options.items() %}
+                    <li class="{% if key == item.correct %}correct-option{% endif %}">
+                        {{ key }}. {{ text }}
+                        {% if key == item.selected %}
+                            <strong class="user-answer"> ← Your answer</strong>
+                        {% endif %}
+                        {% if key == item.correct %}
+                            <span class="correct-answer"> (Correct answer)</span>
+                        {% endif %}
+                    </li>
+                {% endfor %}
+            </ul>
 
-        {% if item.selected is none %}
-            <p><em>You did not answer this question.</em></p>
-        {% elif item.is_correct %}
-            <p style="color: green;"><strong>Correct!</strong></p>
-        {% else %}
-            <p style="color: red;"><strong>Incorrect.</strong></p>
-        {% endif %}
+            <div class="feedback">
+                {% if item.selected is none %}
+                    <p class="unanswered-message"><em>You did not answer this question.</em></p>
+                {% elif item.is_correct %}
+                    <p class="correct-answer"><strong>✓ Correct!</strong></p>
+                {% else %}
+                    <p class="incorrect-answer"><strong>✗ Incorrect</strong></p>
+                {% endif %}
+            </div>
+        </div>
+        {% endfor %}
+
+        <div class="button-container">
+            <a href="{{ url_for('start_quiz') }}">
+                <button>Try Again</button>
+            </a>
+            <button onclick="window.scrollTo({top: 0, behavior: 'smooth'})">Back to Top</button>
+        </div>
     </div>
-    {% endfor %}
 
+    <script>
+        document.getElementById('showResultsBtn').addEventListener('click', function() {
+            // Show all question blocks and the results container
+            document.getElementById('resultsContainer').style.display = 'block';
+            
+            // Optionally hide the show results button after clicking
+            this.style.display = 'none';
+            
+            // If you want to show each question block with animation:
+            const questionBlocks = document.querySelectorAll('.question-block');
+            questionBlocks.forEach((block, index) => {
+                setTimeout(() => {
+                    block.style.display = 'block';
+                }, index * 100); // Staggered appearance
+            });
+        });
+    </script>
 </body>
 </html>
