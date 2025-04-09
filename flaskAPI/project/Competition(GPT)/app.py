@@ -3,12 +3,41 @@ import sqlite3, random
 import html
 import os
 from markupsafe import Markup
+from res.question_insertion import data_insertion
 
 app = Flask(__name__)
 app.secret_key = os.urandom(24)   # Needed for session
 
-DATABASE = r'flaskAPI\project\Competition(GPT)\data\quiz1.db'
+DATABASE = r'flaskAPI\project\Competition(GPT)\data\quiz.db'
 csv_path = r'flaskAPI\project\Competition(GPT)\files\jpsc_gs.csv'
+
+def check_and_load_data(db_path,csv_path):
+
+    # Check if 'questions' table is empty or not
+    conn = sqlite3.connect(db_path)
+    cursor = conn.cursor()
+
+    cursor.execute("SELECT name FROM sqlite_master WHERE type='table' AND name='questions'")
+    table_exists = cursor.fetchone()
+
+    if table_exists:
+        cursor.execute("SELECT COUNT(*) FROM questions")
+        row_count = cursor.fetchone()[0]
+    else:
+        row_count = 0
+
+    conn.close()
+
+    # If no rows exist, load the data from CSV
+    if row_count == 0:
+        print("No data found in DB, inserting now...")
+        data_insertion(db_path, csv_path)
+    else:
+        print(f"Database already has {row_count} questions. Skipping insertion.")
+
+# Run it on app start
+check_and_load_data(DATABASE,csv_path)
+
 
 # Custom filter to escape HTML and add <br> for newlines
 def safe_nl2br(value):
