@@ -148,6 +148,9 @@
         You scored <strong>{{ score }} out of {{ total }}</strong> 
         ({{ "%.1f"|format(score/total*100) }}%)
     </div>
+    <h3>Performance: <span style="color: {% if percentage >= 80 %}green{% elif percentage >= 40 %}orange{% else %}red{% endif %};">
+        {{ performance }}
+    </span></h3>
     
     <div class="button-container">
         <a href="{{ url_for('start_quiz') }}">
